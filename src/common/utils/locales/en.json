@@ -1,0 +1,11 @@
+{
+    "dashboard": "Dashboard",
+    "manager": "Manager",
+    "users": "Users",
+
+    "user-profile": "User Profile",
+    "phone": "PhoneNo",
+    "role": "Role",
+    "status": "Status",
+    "actions": "Actions"
+}

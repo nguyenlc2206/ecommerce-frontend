@@ -1,0 +1,11 @@
+{
+    "dashboard": "Trang chủ",
+    "manager": "Quản lý",
+    "users": "Người sử dụng",
+
+    "user-profile": "Thông tin người dùng",
+    "phone": "Số điện thoại",
+    "role": "Phân quyền",
+    "status": "Trạng thái tài khoản",
+    "actions": "Thao tác"
+}
