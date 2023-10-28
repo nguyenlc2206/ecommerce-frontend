@@ -14,6 +14,7 @@ export interface RegisterService<Entity> {
 }
 
 // ==============================|| AUTH SERVICE IMPLEMENT ||============================== //
+
 export class RegisterServiceImpl<Entity extends AccountModel> implements RegisterService<Entity> {
     private authApi: AuthRepository<AccountModel>;
 

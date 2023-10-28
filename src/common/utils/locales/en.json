@@ -1,11 +1,35 @@
 {
     "dashboard": "Dashboard",
     "manager": "Manager",
+    "manager-caption": "Relations With Users",
+
     "users": "Users",
+    "store": "Store",
+    "store-caption": "Manager category, products,...",
+
+    "category": "Category",
+    "products": "Products",
+    "orders": "Orders",
+    "coupons": "Coupons",
 
     "user-profile": "User Profile",
-    "phone": "PhoneNo",
-    "role": "Role",
-    "status": "Status",
-    "actions": "Actions"
+    "user-phone": "PhoneNo",
+    "user-role": "Role",
+    "user-status": "Status",
+    "user-actions": "Actions",
+
+    "category-name": "Name",
+    "category-accountId": "AccountId",
+    "category-image": "Image",
+    "category-status": "Status",
+    "category-actions": "Actions",
+    "category-add": "Add Category",
+
+    "product-name": "Name",
+    "product-description": "Description",
+    "product-size": "Sizes",
+    "product-category": "Category",
+    "product-status": "Status",
+    "product-images": "Images",
+    "product-actions": "Actions"
 }

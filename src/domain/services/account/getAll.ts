@@ -1,5 +1,5 @@
 // * import libs
-import Container from 'typedi';
+import Container, { Service } from 'typedi';
 
 // * import projects
 import { Either, failure, success } from '@ecommerce-frontend/src/common/functions/Either';
@@ -11,15 +11,17 @@ import AppError from '@ecommerce-frontend/src/common/functions/AppError';
 // import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { getListUsers } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
+import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 
 /** define getAll services */
-export interface GetAllService<Entity> {
+export interface GetAllAccountService<Entity> {
     execute(): Promise<Either<AccountModel[], AppError>>;
 }
 
 // ==============================|| GETALL ACCOUNT SERVICE IMPLEMENT ||============================== //
 
-export class GetAllServiceImpl<Entity extends AccountModel> implements GetAllService<Entity> {
+@Service()
+export class GetAllAccountServiceImpl<Entity extends AccountModel> implements GetAllAccountService<Entity> {
     private accountApi: AccountRepository<AccountModel>;
 
     // * init constructor
@@ -30,7 +32,19 @@ export class GetAllServiceImpl<Entity extends AccountModel> implements GetAllSer
     /** overiding execute method */
     async execute(): Promise<Either<AccountModel[], AppError>> {
         const res = await this.accountApi.getAll();
-        if (res?.EC !== 200) return failure(new AppError(res?.EM, res?.EC));
+        if (res?.EC !== 200) {
+            /** open snackbar alert */
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: res?.EM,
+                    variant: 'alert',
+                    alert: { color: 'error' },
+                    close: false
+                })
+            );
+            return failure(new AppError(res?.EM, res?.EC));
+        }
 
         const _init = new AccountModel();
         const result = _init.fromAccountModelGetAll(res);

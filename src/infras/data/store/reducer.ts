@@ -8,6 +8,8 @@ import accountReducer from '@ecommerce-frontend/src/infras/data/store/reducers/a
 import snackbarReducer from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import menuReducer from '@ecommerce-frontend/src/infras/data/store/reducers/menu';
 import userReducer from '@ecommerce-frontend/src/infras/data/store/reducers/user';
+import categoryReducer from '@ecommerce-frontend/src/infras/data/store/reducers/category';
+import productReducer from '@ecommerce-frontend/src/infras/data/store/reducers/product';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -22,7 +24,9 @@ const reducer = combineReducers({
     ),
     menu: menuReducer,
     account: accountReducer,
-    user: userReducer
+    user: userReducer,
+    category: categoryReducer,
+    product: productReducer
 });
 
 export default reducer;

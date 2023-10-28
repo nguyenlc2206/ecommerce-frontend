@@ -3,15 +3,18 @@ import Container from 'typedi';
 
 // * import projects
 import { Either, failure, success } from '@ecommerce-frontend/src/common/functions/Either';
-import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
-import { AccountRepository } from '@ecommerce-frontend/src/domain/repository/account.repository';
-import { AccountApi } from '@ecommerce-frontend/src/infras/data/remote/accountApi';
 import AppError from '@ecommerce-frontend/src/common/functions/AppError';
+import { CategoryRepository } from '@ecommerce-frontend/src/domain/repository/category.repository';
+import { CategoryModel } from '@ecommerce-frontend/src/domain/entities/Category';
+import { CategoryApi } from '@ecommerce-frontend/src/infras/data/remote/category.Api';
+import {
+    GetAllCategoryService,
+    GetAllCategoryServiceImpl
+} from '@ecommerce-frontend/src/domain/services/categories/getAll';
 
 // import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
-import { GetAllAccountService, GetAllAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/getAll';
 
 /** define updateProfile services */
 export interface DeleteService<Entity> {
@@ -20,21 +23,21 @@ export interface DeleteService<Entity> {
 
 // ==============================|| DELETE SERVICE IMPLEMENT ||============================== //
 
-export class DeleteAccountServiceImpl<Entity extends AccountModel> implements DeleteService<Entity> {
+export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements DeleteService<Entity> {
     /** init api */
-    private accountApi: AccountRepository<AccountModel>;
+    private categoryApi: CategoryRepository<CategoryModel>;
     /** init service */
-    private getAllService: GetAllAccountService<AccountModel>;
+    private getAllService: GetAllCategoryService<CategoryModel>;
 
     // * init constructor
     constructor() {
-        this.accountApi = Container.get(AccountApi);
-        this.getAllService = Container.get(GetAllAccountServiceImpl);
+        this.categoryApi = Container.get(CategoryApi);
+        this.getAllService = Container.get(GetAllCategoryServiceImpl);
     }
 
     /** overiding execute method */
     async execute(id: string): Promise<Either<string, AppError>> {
-        const res = await this.accountApi.delete(id);
+        const res = await this.categoryApi.delete(id);
         if (res?.EC !== 200) {
             /** open snackbar alert */
             dispatch(

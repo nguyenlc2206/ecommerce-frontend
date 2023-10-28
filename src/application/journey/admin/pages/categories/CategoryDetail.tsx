@@ -1,55 +1,42 @@
-// import libs
+// * import libs
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 // import material ui
+import { LoadingButton } from '@mui/lab';
 import { Button, Grid, Stack, TextField, Typography } from '@mui/material';
 
-// import projects
-import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
+// * import projects
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import Avatar from '@ecommerce-frontend/src/application/widgets/avatar/Avatar';
 import SubCard from '@ecommerce-frontend/src/application/widgets/cards/SubCard';
 import AnimateButton from '@ecommerce-frontend/src/application/widgets/buttons/AnimateButton';
 
 // assets
-import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
-import { GetAccountByIdServiceImpl } from '@ecommerce-frontend/src/domain/services/account/getAccountById';
 import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
-import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 import FormControl from '@ecommerce-frontend/src/application/widgets/forms/FormControl';
-import { LoadingButton } from '@mui/lab';
-import { LOGIN } from '@ecommerce-frontend/src/infras/data/store/actions/account';
+import { GetCategoryByIdServiceImpl } from '@ecommerce-frontend/src/domain/services/categories/getById';
 
-// ==============================|| ADMIN USERDETAIL PAGE ||============================== //
+// ==============================|| ADMIN CATEGORY DETAIL PAGE ||============================== //
 
-const UserDetail = () => {
+const CategoryDetail = () => {
     /** init serivce */
-    const getAccountByIdService = new GetAccountByIdServiceImpl();
-
+    const getCategoryById = new GetCategoryByIdServiceImpl();
     /** init redux */
-    const { userSelect } = useSelector((state) => state.user);
-    const { account } = useSelector((state) => state.account);
-
-    const { id } = useParams();
+    const { categorySelect } = useSelector((state) => state.category);
 
     /** init hookks */
+    const { id } = useParams();
     const uploadInputRef = React.useRef(null);
-    const [image, setImage] = React.useState<string | ArrayBuffer>('');
-    const [imageURL, setImageURL] = React.useState<string>('');
     const [loading, setLoading] = React.useState<boolean>(false);
-
-    const { updateProfile } = useAuth();
-
-    const [fullName, setFullName] = React.useState<string>(userSelect?.fullName);
-    const [email, setEmail] = React.useState<string>(userSelect?.email);
-    const [phone, setPhone] = React.useState<string>(userSelect?.phoneNo);
+    const [name, setName] = React.useState<string>(categorySelect?.name);
+    const [image, setImage] = React.useState<string | ArrayBuffer>(categorySelect?.image);
+    const [imageURL, setImageURL] = React.useState<string>('');
 
     /** initial */
     const handleInitial = () => {
-        setFullName(userSelect?.fullName);
-        setEmail(userSelect?.email);
-        setPhone(userSelect?.phoneNo);
+        setName(categorySelect?.name);
     };
 
     /** chandle convert base64 to url */
@@ -63,11 +50,10 @@ const UserDetail = () => {
                 new Uint8Array(byteCharsArray.slice(c * chunkLength, chunkLength * (c + 1)).map((s) => s.charCodeAt(0)))
             );
         }
-
         const blob = new Blob(bytesArrays, { type: contentType });
-
         return blob;
     };
+
     /** handle upload image  */
     const handleUploadImage = ({ target }) => {
         const fileReader = new FileReader();
@@ -83,65 +69,33 @@ const UserDetail = () => {
         };
     };
 
-    /** handle updateProfile */
-    const hanleUpdateProfile = async () => {
-        setLoading(true);
-        let accountUpdate = new AccountModel();
-        if (image) {
-            accountUpdate.id = id;
-            accountUpdate.data = {
-                fullName: fullName,
-                phoneNo: phone,
-                avatar: image,
-                email: email
-            };
-        } else {
-            accountUpdate.id = id;
-            accountUpdate.data = {
-                fullName: fullName,
-                phoneNo: phone,
-                email: email
-            };
-        }
-        /** call update profile */
-        const res = await updateProfile(accountUpdate);
-        setLoading(false);
-        if (res.isFailure()) return;
-
-        /** update header */
-        if (res.data?.id === account?.id) {
-            /** save data to redux */
-            dispatch({ type: LOGIN, payload: { isLoggedIn: true, account: { ...res.data } } });
-        }
-    };
-
     /** @todo: init useEffect */
     React.useEffect(() => {
-        getAccountByIdService.execute(id);
+        getCategoryById.execute(id);
     }, []);
 
     React.useEffect(() => {
         handleInitial();
-    }, [userSelect]);
+    }, [categorySelect]);
 
     return (
         <>
-            {userSelect && (
-                <MainCard title='Account Detail'>
+            {categorySelect && (
+                <MainCard title='Category Detail'>
                     <Grid container spacing={gridSpacing}>
                         <Grid item sm={6} md={4}>
-                            <SubCard title='Profile Picture' contentSX={{ textAlign: 'center' }}>
+                            <SubCard title='Category Picture' contentSX={{ textAlign: 'center' }}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Avatar
                                             alt='User 1'
-                                            src={imageURL ? imageURL : (userSelect?.avatar as string)}
+                                            src={imageURL ? imageURL : (categorySelect?.image as string)}
                                             sx={{ width: 100, height: 100, margin: '0 auto' }}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Typography variant='subtitle2' align='center'>
-                                            Upload/Change Your Profile Image
+                                            Upload/Change Your Category Image
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12}>
@@ -162,7 +116,7 @@ const UserDetail = () => {
                                                     variant='contained'
                                                     size='small'
                                                 >
-                                                    Upload Avatar
+                                                    Upload Image
                                                 </Button>
                                             </AnimateButton>
                                         </label>
@@ -170,58 +124,23 @@ const UserDetail = () => {
                                 </Grid>
                             </SubCard>
                         </Grid>
-
                         <Grid item sm={6} md={8}>
-                            <SubCard title='Edit Account Details'>
+                            <SubCard title='Edit Category Details'>
                                 <Grid container spacing={gridSpacing}>
-                                    {userSelect?.email && (
+                                    {categorySelect?.name && (
                                         <Grid item xs={12}>
                                             <FormControl
-                                                captionLabel='Email Address'
-                                                value={email || ''}
+                                                captionLabel='Category Name'
+                                                value={name || ''}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    setEmail(e.target.value)
+                                                    setName(e.target.value)
                                                 }
                                             />
                                         </Grid>
                                     )}
-                                    {userSelect?.phoneNo && (
-                                        <Grid item md={6} xs={12}>
-                                            <FormControl
-                                                captionLabel='Phone Number'
-                                                value={phone || ''}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    setPhone(e.target.value)
-                                                }
-                                            />
-                                        </Grid>
-                                    )}
-                                    {userSelect?.fullName && (
-                                        <Grid item md={6} xs={12}>
-                                            <FormControl
-                                                captionLabel='Full Name'
-                                                value={fullName || ''}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    setFullName(e.target.value)
-                                                }
-                                            />
-                                        </Grid>
-                                    )}
-                                    <Grid item md={6} xs={12}>
-                                        <TextField
-                                            id='outlined-basic8'
-                                            fullWidth
-                                            label='Birthday'
-                                            defaultValue='22/06/1999'
-                                        />
-                                    </Grid>
                                     <Grid item xs={12}>
                                         <Stack direction='row'>
-                                            <LoadingButton
-                                                variant='contained'
-                                                loading={loading}
-                                                onClick={hanleUpdateProfile}
-                                            >
+                                            <LoadingButton variant='contained' loading={loading} onClick={() => {}}>
                                                 Change Details
                                             </LoadingButton>
                                         </Stack>
@@ -236,4 +155,4 @@ const UserDetail = () => {
     );
 };
 
-export default UserDetail;
+export default CategoryDetail;

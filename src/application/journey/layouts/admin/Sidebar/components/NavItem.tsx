@@ -135,7 +135,9 @@ const NavItem = ({ item, level, parentId, isParents = false }: NavItemProps) => 
                         })
                     }}
                     selected={isSelected}
-                    onClick={() => itemHandler(item.id!)}
+                    onClick={() => {
+                        itemHandler(item.id!);
+                    }}
                 >
                     <ButtonBase
                         aria-label='theme-icon'
@@ -200,7 +202,7 @@ const NavItem = ({ item, level, parentId, isParents = false }: NavItemProps) => 
                         />
                     )}
 
-                    {drawerOpen && item.chip && (
+                    {/* {drawerOpen && item.chip && (
                         <Chip
                             color={item.chip.color}
                             variant={item.chip.variant}
@@ -208,7 +210,7 @@ const NavItem = ({ item, level, parentId, isParents = false }: NavItemProps) => 
                             label={item.chip.label}
                             avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
                         />
-                    )}
+                    )} */}
                 </ListItemButton>
             ) : (
                 <ListItemButton

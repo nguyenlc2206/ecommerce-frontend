@@ -2,12 +2,13 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconUsers } from '@tabler/icons-react';
+import { IconUsers, IconBuildingStore } from '@tabler/icons-react';
 import { NavItemType } from '@ecommerce-frontend/src/common/types';
 
 // constant
 const icons = {
-    IconUsers
+    IconUsers,
+    IconBuildingStore
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -15,7 +16,7 @@ const icons = {
 const usersNav: NavItemType = {
     id: 'manager',
     title: <FormattedMessage id='manager' />,
-    // caption: 'CRUD with users,...',
+    caption: <FormattedMessage id='manager-caption' />,
     type: 'group',
     children: [
         {

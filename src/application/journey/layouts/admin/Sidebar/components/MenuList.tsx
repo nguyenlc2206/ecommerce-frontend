@@ -50,14 +50,8 @@ const MenuListItems = () => {
                 if (item.url && item.id !== lastItemId) {
                     return (
                         <List key={item.id}>
-                            {!drawerOpen ? (
-                                <NavItem item={item} level={1} isParents />
-                            ) : (
-                                <>
-                                    <NavItem item={item} level={1} isParents />
-                                    {layout !== LAYOUT_CONST.HORIZONTAL_LAYOUT && <Divider sx={{ py: 0.25 }} />}
-                                </>
-                            )}
+                            <NavItem item={item} level={1} isParents />
+                            {layout !== LAYOUT_CONST.HORIZONTAL_LAYOUT && <Divider sx={{ py: 0.5 }} />}
                         </List>
                     );
                 }
@@ -71,7 +65,6 @@ const MenuListItems = () => {
                         lastItemId={lastItemId}
                     />
                 );
-
             default:
                 return (
                     <Typography key={item.id} variant='h6' color='error' align='center'>

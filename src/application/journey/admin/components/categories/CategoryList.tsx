@@ -1,3 +1,4 @@
+// * import libs
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -27,114 +28,76 @@ import {
 } from '@mui/material';
 
 // assets
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import CheckIcon from '@mui/icons-material/Check';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import BlockTwoToneIcon from '@mui/icons-material/BlockTwoTone';
 
-// import redux
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
-import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
-import { useDispatch } from '@ecommerce-frontend/src/infras/data/store';
-import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
-import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
+// * import projects
+import { GetAllCategoryServiceImpl } from '@ecommerce-frontend/src/domain/services/categories/getAll';
+import { useDispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { CategoryModel } from '@ecommerce-frontend/src/domain/entities/Category';
+import { activeCategory } from '@ecommerce-frontend/src/infras/data/store/reducers/category';
+import { DeleteCategoryServiceImpl } from '@ecommerce-frontend/src/domain/services/categories/delete';
 
-// init service
-import { GetAllAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/getAll';
+// ==============================|| CATEGORY LIST ||============================== //
 
-// ==============================|| USER LIST ||============================== //
-
-const UserList = () => {
+const CategoryList = () => {
     /** init service */
-    const getAllService = new GetAllAccountServiceImpl();
+    const getCategoryService = new GetAllCategoryServiceImpl();
+    const deleteCategoryService = new DeleteCategoryServiceImpl();
 
     /** init theme */
     const theme = useTheme();
-    const { users } = useSelector((state) => state.user);
+    const { categories } = useSelector((state) => state.category);
 
     /** init hooks */
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { deleteAccount } = useAuth();
-
     /** init fetch list users */
     React.useEffect(() => {
         // * execute getAll accounts
-        getAllService.execute();
+        getCategoryService.execute();
     }, []);
 
     return (
         <>
-            {Object.values(users).length ? (
+            {Object.values(categories).length ? (
                 <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell sx={{ pl: 3 }}>#</TableCell>
                                 <TableCell>
-                                    {' '}
-                                    <FormattedMessage id='user-profile' />
+                                    <FormattedMessage id='category-accountId' />
                                 </TableCell>
                                 <TableCell>
-                                    <FormattedMessage id='user-phone' />
+                                    <FormattedMessage id='category-name' />
                                 </TableCell>
                                 <TableCell>
-                                    <FormattedMessage id='user-role' />
-                                </TableCell>
-                                <TableCell>
-                                    <FormattedMessage id='user-status' />
+                                    <FormattedMessage id='category-image' />
                                 </TableCell>
                                 <TableCell align='center' sx={{ pr: 3 }}>
-                                    <FormattedMessage id='user-actions' />
+                                    <FormattedMessage id='category-status' />
+                                </TableCell>
+                                <TableCell align='center' sx={{ pr: 3 }}>
+                                    <FormattedMessage id='category-actions' />
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {Object.values(users).map((item: AccountModel) => {
+                            {Object.values(categories).map((item: CategoryModel, index: number) => {
                                 return (
                                     <TableRow hover key={item?.id}>
                                         <TableCell sx={{ pl: 3 }}>{item?.id}</TableCell>
+                                        <TableCell>{item?.accountId}</TableCell>
+                                        <TableCell>{item?.name}</TableCell>
                                         <TableCell>
                                             <Grid container spacing={2} alignItems='center'>
                                                 <Grid item>
-                                                    <Avatar alt='User 1' src={item?.avatar as string} />
-                                                </Grid>
-                                                <Grid item xs zeroMinWidth>
-                                                    <Typography align='left' variant='subtitle1' component='div'>
-                                                        {item?.fullName}{' '}
-                                                        {!item?.isDeleted ? (
-                                                            <CheckCircleIcon
-                                                                sx={{ color: 'success.dark', width: 14, height: 14 }}
-                                                            />
-                                                        ) : (
-                                                            <HighlightOffIcon
-                                                                sx={{ color: 'error.dark', width: 14, height: 14 }}
-                                                            />
-                                                        )}
-                                                    </Typography>
-                                                    <Typography align='left' variant='subtitle2' noWrap>
-                                                        {item?.email}
-                                                    </Typography>
+                                                    <Avatar alt='User 1' src={item?.image as string} />
                                                 </Grid>
                                             </Grid>
-                                        </TableCell>
-                                        <TableCell>{item?.phoneNo}</TableCell>
-                                        <TableCell>
-                                            <Chip
-                                                label={item?.role}
-                                                size='small'
-                                                sx={{
-                                                    background:
-                                                        item?.role === 'admin'
-                                                            ? theme.palette.primary.light + 60
-                                                            : theme.palette.success.light + 60,
-                                                    color:
-                                                        item?.role === 'admin'
-                                                            ? theme.palette.primary.dark
-                                                            : theme.palette.success.dark
-                                                }}
-                                            />
                                         </TableCell>
                                         <TableCell>
                                             <Chip
@@ -158,7 +121,7 @@ const UserList = () => {
                                                         aria-label='delete'
                                                         size='large'
                                                         onClick={() => {
-                                                            dispatch(activeUser(item));
+                                                            dispatch(activeCategory(item));
                                                             navigate(item?.id);
                                                         }}
                                                     >
@@ -166,20 +129,39 @@ const UserList = () => {
                                                     </IconButton>
                                                 </Tooltip>
 
-                                                <Tooltip placement='top' title='Delete'>
-                                                    <IconButton
-                                                        color='primary'
-                                                        sx={{
-                                                            color: theme.palette.orange.dark,
-                                                            borderColor: theme.palette.orange.main,
-                                                            '&:hover ': { background: theme.palette.orange.light }
-                                                        }}
-                                                        size='large'
-                                                        onClick={() => deleteAccount(item?.id)}
-                                                    >
-                                                        <BlockTwoToneIcon sx={{ fontSize: '1.1rem' }} />
-                                                    </IconButton>
-                                                </Tooltip>
+                                                {!item?.isDeleted ? (
+                                                    <Tooltip placement='top' title='Block'>
+                                                        <IconButton
+                                                            color='primary'
+                                                            sx={{
+                                                                color: theme.palette.orange.dark,
+                                                                borderColor: theme.palette.orange.main,
+                                                                '&:hover ': { background: theme.palette.orange.light }
+                                                            }}
+                                                            size='large'
+                                                            onClick={() => deleteCategoryService.execute(item?.id)}
+                                                        >
+                                                            <BlockTwoToneIcon sx={{ fontSize: '1.1rem' }} />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Tooltip placement='top' title='Active'>
+                                                        <IconButton
+                                                            color='primary'
+                                                            sx={{
+                                                                color: theme.palette.secondary.dark,
+                                                                borderColor: theme.palette.secondary.main,
+                                                                '&:hover ': {
+                                                                    background: theme.palette.secondary.light
+                                                                }
+                                                            }}
+                                                            size='large'
+                                                            onClick={() => {}}
+                                                        >
+                                                            <CheckIcon sx={{ fontSize: '1.1rem' }} />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )}
                                             </Stack>
                                         </TableCell>
                                     </TableRow>
@@ -208,4 +190,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default CategoryList;

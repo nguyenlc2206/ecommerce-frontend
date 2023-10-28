@@ -2,10 +2,34 @@
     "dashboard": "Trang chủ",
     "manager": "Quản lý",
     "users": "Người sử dụng",
+    "manager-caption": "Thao tác với người dùng",
+
+    "store": "Quản lý cửa hàng",
+    "store-caption": "Hàng hóa, sản phẩm, mã giảm giá,...",
+
+    "category": "Loại sản phẩm",
+    "products": "Sản phẩm",
+    "orders": "Đơn hàng",
+    "coupons": "Mã giảm giá",
 
     "user-profile": "Thông tin người dùng",
-    "phone": "Số điện thoại",
-    "role": "Phân quyền",
-    "status": "Trạng thái tài khoản",
-    "actions": "Thao tác"
+    "user-phone": "Số điện thoại",
+    "user-role": "Phân quyền",
+    "user-status": "Trạng thái tài khoản",
+    "user-actions": "Thao tác",
+
+    "category-name": "Tên",
+    "category-accountId": "Mã người tạo",
+    "category-image": "Hình ảnh",
+    "category-status": "Trạng thái",
+    "category-actions": "Thao tác",
+    "category-add": "Thêm loại sản phẩm",
+
+    "product-name": "Tên sản phẩm",
+    "product-description": "Mô tả",
+    "product-size": "Kích cỡ",
+    "product-category": "Loại sản phẩm",
+    "product-status": "Trạng thái",
+    "product-images": "Hình ảnh",
+    "product-actions": "Thao tác"
 }
