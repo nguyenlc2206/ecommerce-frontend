@@ -29,7 +29,7 @@ export class RegisterServiceImpl<Entity extends AccountModel> implements Registe
         if (res?.EC !== 200) return failure(new AppError(res?.EM, res?.EC));
 
         const _init = new AccountModel();
-        const result = _init.fromAccountModelLogin(res);
+        const result = _init.fromAccountModel(res);
 
         dispatch({
             type: REGISTER,

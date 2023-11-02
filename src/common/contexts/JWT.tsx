@@ -25,6 +25,7 @@ import { VerifyOTPServiceImpl } from '@ecommerce-frontend/src/domain/services/au
 import { LogoutServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/logout';
 import { UpdateProfileServiceImpl } from '@ecommerce-frontend/src/domain/services/account/update';
 import { DeleteAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/delete';
+import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -49,6 +50,7 @@ const JWTContext = React.createContext<JWTContextType | null>(null);
 
 export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     /** init hooks */
+    const { account } = useSelector((state) => state.account);
     const [state, dispatch] = React.useReducer(accountReducer, initialState);
 
     React.useEffect(() => {}, []);
@@ -148,7 +150,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         const verifyOTPSerivce = new VerifyOTPServiceImpl();
         // * call service verifyOTP
         const res = await verifyOTPSerivce.execute({
-            email: state.account?.email,
+            email: account?.email,
             password: password,
             passwordConfirm: passwordConfirm,
             OTP: OTP,
@@ -189,10 +191,6 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         // * success
         return success('okie');
     };
-
-    // if (state.isInitialized !== undefined && !state.isInitialized) {
-    //     return <Loader />;
-    // }
 
     return (
         <JWTContext.Provider

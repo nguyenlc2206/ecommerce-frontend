@@ -11,6 +11,7 @@ import { AuthApi } from '@ecommerce-frontend/src/infras/data/remote/authApi';
 // * import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { FORGOTPASSWORD } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 
 /** define auth services */
 export interface ForgotPasswordService<Entity> {
@@ -34,7 +35,11 @@ export class ForgotPasswordServiceImpl<Entity extends AccountModel> implements F
         if (res?.EC !== 200) return failure(new AppError(res?.EM, res?.EC));
 
         const _init = new AccountModel();
-        const result = _init.fromAccountModelLogin(res);
+        const result = _init.fromAccountModel(res);
+
+        // * dispatch account
+        const account = { email: res?.DT?.data?.email } as AccountModel;
+        dispatch({ type: FORGOTPASSWORD, payload: { isLoggedIn: false, account: account } });
 
         /** open snackbar alert */
         dispatch(

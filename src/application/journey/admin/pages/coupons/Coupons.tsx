@@ -11,7 +11,7 @@ const AdminCoupons = () => {
     /** useEffect */
     React.useEffect(() => {}, []);
 
-    return <MainCard title={<FormattedMessage id='coupons' />}></MainCard>;
+    return <MainCard></MainCard>;
 };
 
 export default AdminCoupons;

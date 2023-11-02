@@ -20,7 +20,7 @@ export class AccountModel {
     isDeleted?: boolean;
     data?: AccountModel;
 
-    fromAccountModelLogin?(res: AxiosResponseCustom) {
+    fromAccountModel?(res: AxiosResponseCustom) {
         return {
             id: res?.DT?.data?.id,
             fullName: res?.DT?.data?.fullName,

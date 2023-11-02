@@ -11,7 +11,7 @@ const AdminOrders = () => {
     /** useEffect */
     React.useEffect(() => {}, []);
 
-    return <MainCard title={<FormattedMessage id='orders' />}></MainCard>;
+    return <MainCard></MainCard>;
 };
 
 export default AdminOrders;

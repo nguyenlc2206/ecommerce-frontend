@@ -123,7 +123,7 @@ const MainAdminLayout = () => {
             {/* main content */}
             <Main theme={theme} open={drawerOpen} layout={layout}>
                 <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 } } })}>
-                    {/* <Breadcrumbs separator={IconChevronRight} navigation={menuItems} icon title rightAlign /> */}
+                    <Breadcrumbs separator={IconChevronRight} navigation={menuItems} icon title rightAlign />
                     <Outlet />
                 </Container>
             </Main>

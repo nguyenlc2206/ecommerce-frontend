@@ -18,14 +18,15 @@ const menu = createSlice({
     name: 'menu',
     initialState,
     reducers: {
+        // active item
         activeItem(state, action) {
             state.selectedItem = action.payload;
         },
-
+        // active id
         activeID(state, action) {
             state.selectedID = action.payload;
         },
-
+        // open drawer
         openDrawer(state, action) {
             state.drawerOpen = action.payload;
         }

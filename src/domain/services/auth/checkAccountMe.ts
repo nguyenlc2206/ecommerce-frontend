@@ -42,7 +42,7 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
         }
 
         const _init = new AccountModel();
-        const result = _init.fromAccountModelLogin(res);
+        const result = _init.fromAccountModel(res);
 
         return success(result);
     }
