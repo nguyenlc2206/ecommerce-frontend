@@ -1,5 +1,11 @@
 // action - state management
-import { LOGIN, LOGOUT, REGISTER, FORGOTPASSWORD } from '@ecommerce-frontend/src/infras/data/store/actions/account';
+import {
+    LOGIN,
+    LOGOUT,
+    REGISTER,
+    FORGOTPASSWORD,
+    UPDATE
+} from '@ecommerce-frontend/src/infras/data/store/actions/account';
 import { InitialLoginContextProps } from '@ecommerce-frontend/src/common/types/auth';
 
 // ==============================|| ACCOUNT REDUCER ||============================== //
@@ -19,6 +25,13 @@ const initialState: InitialLoginContextProps = {
 const accountReducer = (state = initialState, action: AccountReducerActionProps) => {
     switch (action.type) {
         case FORGOTPASSWORD: {
+            const { account } = action.payload!;
+            return {
+                ...state,
+                account
+            };
+        }
+        case UPDATE: {
             const { account } = action.payload!;
             return {
                 ...state,

@@ -10,22 +10,31 @@ import menuReducer from '@ecommerce-frontend/src/infras/data/store/reducers/menu
 import userReducer from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 import categoryReducer from '@ecommerce-frontend/src/infras/data/store/reducers/category';
 import productReducer from '@ecommerce-frontend/src/infras/data/store/reducers/product';
+import cartReducer from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
-    snackbar: persistReducer(
+    cart: persistReducer(
         {
-            key: 'snack',
+            key: 'cart',
             storage,
             keyPrefix: 'ecommerce-'
         },
-        snackbarReducer
+        cartReducer
     ),
+    category: persistReducer(
+        {
+            key: 'category',
+            storage,
+            keyPrefix: 'ecommerce-'
+        },
+        categoryReducer
+    ),
+    snackbar: snackbarReducer,
     menu: menuReducer,
     account: accountReducer,
     user: userReducer,
-    category: categoryReducer,
     product: productReducer
 });
 

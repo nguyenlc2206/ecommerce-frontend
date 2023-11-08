@@ -4,7 +4,7 @@ import type { PaletteMode } from '@mui/material';
 export type ConfigProps = {
     layout: string;
     drawerType: string;
-    fontFamily: string;
+    fontFamily?: string;
     borderRadius: number;
     outlinedFilled: boolean;
     navType: PaletteMode;
@@ -17,7 +17,7 @@ export type ConfigProps = {
 export type CustomizationProps = {
     layout: string;
     drawerType: string;
-    fontFamily: string;
+    fontFamily?: string;
     borderRadius: number;
     outlinedFilled: boolean;
     navType: PaletteMode;

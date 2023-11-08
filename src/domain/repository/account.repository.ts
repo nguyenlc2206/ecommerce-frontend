@@ -6,4 +6,5 @@ export interface AccountRepository<T> {
     updateProfile(entity: T): Promise<AxiosResponseCustom>;
     getAccountById(id: string): Promise<AxiosResponseCustom>;
     delete(id: string): Promise<AxiosResponseCustom>;
+    updateMe(entity: T): Promise<AxiosResponseCustom>;
 }

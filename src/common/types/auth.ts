@@ -30,7 +30,7 @@ export type JWTContextType = {
     forgotPassword: (email: string) => Promise<Either<AccountModel, AppError>>;
     verifyOTP: (password: string, passwordConfirm: string, OTP: string) => Promise<Either<AccountModel, AppError>>;
     updateProfile: (entity: AccountModel) => Promise<Either<AccountModel, AppError>>;
-    updateMe: () => Promise<Either<AccountModel, AppError>>;
+    updateMe: (entity: AccountModel) => Promise<Either<AccountModel, AppError>>;
     deleteAccount: (id: string) => Promise<Either<string, AppError>>;
 };
 

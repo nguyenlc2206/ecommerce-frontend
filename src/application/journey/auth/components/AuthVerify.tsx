@@ -17,6 +17,7 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
+    Stack,
     Typography
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -218,6 +219,19 @@ const AuthVerifyOTPContent = ({ loginProp, ...others }: { loginProp?: number }) 
                             </LoadingButton>
                         </Box>
                     )}
+
+                    <Grid item xs={12} sx={{ mt: 2 }}>
+                        <Stack direction='row' justifyContent='space-between' alignItems='baseline'>
+                            <Typography>Did not receive the email? Check your spam filter, or</Typography>
+                            <Typography
+                                variant='body1'
+                                sx={{ minWidth: 85, ml: 2, textDecoration: 'none', cursor: 'pointer' }}
+                                color='primary'
+                            >
+                                Resend code
+                            </Typography>
+                        </Stack>
+                    </Grid>
                 </Grid>
             </Grid>
         </form>

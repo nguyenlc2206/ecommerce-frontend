@@ -8,7 +8,7 @@ import { IconMenu2 } from '@tabler/icons-react';
 // * import redux
 import { useDispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { openDrawer } from '@ecommerce-frontend/src/infras/data/store/reducers/menu';
-import ProfileSection from '@ecommerce-frontend/src/application/journey/layouts/admin/Header/components/ProflieSection';
+import ProfileSection from '@ecommerce-frontend/src/application/journey/layouts/client/Profile/ProflieSection';
 import LocalizationSection from '@ecommerce-frontend/src/application/journey/layouts/admin/Header/components/LocalizationSection';
 
 // ==============================|| MAIN NAVBAR / HEADER ADMIN ||============================== //

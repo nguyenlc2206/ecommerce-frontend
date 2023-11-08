@@ -11,7 +11,7 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
         MuiButton: {
             styleOverrides: {
                 root: {
-                    fontWeight: 500,
+                    fontWeight: 550,
                     borderRadius: '4px'
                 }
             }
@@ -284,7 +284,7 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                     '&.MuiTableCell-head': {
                         fontSize: '0.875rem',
                         color: mode === 'dark' ? theme.palette.grey[600] : theme.palette.grey[900],
-                        fontWeight: 550
+                        fontWeight: 500
                     }
                 }
             }

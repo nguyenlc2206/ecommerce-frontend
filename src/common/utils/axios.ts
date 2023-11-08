@@ -18,7 +18,6 @@ instance.interceptors.request.use(
     (config) => {
         const access_token = window.localStorage.getItem('serviceToken') || '';
         config.headers['Authorization'] = `Bearer ${access_token}`;
-        config.headers['Content-Type'] = 'application/json';
         return config;
     },
     (error: AxiosError) => {

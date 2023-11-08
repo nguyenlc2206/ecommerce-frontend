@@ -94,3 +94,9 @@ export type NavItemType = {
 
 export type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
 export type NavItemTypeObject = { children?: NavItemType[]; items?: NavItemType[]; type?: string };
+
+export interface TabsProps {
+    children?: React.ReactElement | React.ReactNode | string;
+    value: string | number;
+    index: number;
+}

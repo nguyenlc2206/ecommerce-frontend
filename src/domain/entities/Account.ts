@@ -1,11 +1,11 @@
-import { AxiosResponseCustom } from '@ecommerce-frontend/src/common/types';
+import { AxiosResponseCustom, KeyedObject } from '@ecommerce-frontend/src/common/types';
 
 /** @todo: define account model reponse */
 export class AccountModel {
     id?: string;
     fullName?: string;
     phoneNo?: string;
-    avatar?: string | ArrayBuffer;
+    avatar?: any;
     email?: string;
     password?: string;
     passwordConfirm?: string;
@@ -19,6 +19,8 @@ export class AccountModel {
     OTPType?: string;
     isDeleted?: boolean;
     data?: AccountModel;
+    shippingAddress?: KeyedObject;
+    cart?: KeyedObject;
 
     fromAccountModel?(res: AxiosResponseCustom) {
         return {
@@ -28,7 +30,9 @@ export class AccountModel {
             email: res?.DT?.data?.email,
             role: res?.DT?.data?.role,
             avatar: res?.DT?.data?.avatar,
-            accessToken: res?.DT?.data?.accessToken
+            accessToken: res?.DT?.data?.accessToken,
+            shippingAddress: res?.DT?.data?.shippingAddress,
+            cart: res?.DT?.data?.cart
         } as AccountModel;
     }
 

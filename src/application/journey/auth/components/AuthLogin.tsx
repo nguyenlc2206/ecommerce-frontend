@@ -96,7 +96,7 @@ const AuthLoginContent = ({ loginProp, ...others }: { loginProp?: number }) => {
             if (scriptedRef.current) {
                 formik.setStatus({ success: true });
                 formik.setSubmitting(false);
-                navigate('/admin');
+                navigate('/');
             }
         }
     });

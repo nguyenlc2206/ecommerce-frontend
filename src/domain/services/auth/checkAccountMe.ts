@@ -9,6 +9,8 @@ import { AuthApi } from '@ecommerce-frontend/src/infras/data/remote/authApi';
 // import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { LOGOUT } from '@ecommerce-frontend/src/infras/data/store/actions/account';
+import { addProduct, setStep } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 
 /** define auth services */
 export interface CheckAccountMeService<Entity> {
@@ -38,11 +40,17 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
                     close: false
                 })
             );
+            /** save data to redux */
+            dispatch({ type: LOGOUT });
             return failure(new AppError(res?.EM, res?.EC));
         }
 
         const _init = new AccountModel();
         const result = _init.fromAccountModel(res);
+
+        // check product cart with account Id
+        dispatch(addProduct(result?.cart?.products));
+        dispatch(setStep(result?.cart?.status));
 
         return success(result);
     }

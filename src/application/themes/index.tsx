@@ -25,7 +25,6 @@ import { CustomShadowProps } from '@ecommerce-frontend/src/common/types/default-
 const ThemeCustomization = ({ children }: Props) => {
     /** init variable config */
     const { borderRadius, fontFamily, navType, outlinedFilled, presetColor, rtlLayout } = useConfig();
-
     /** init theme */
     const theme: Theme = useMemo<Theme>(() => Palette(navType, presetColor), [navType, presetColor]);
 

@@ -1,4 +1,5 @@
 import { AxiosResponseCustom } from '@ecommerce-frontend/src/common/types';
+import { ProductsFilter } from '@ecommerce-frontend/src/common/types/e-commerce';
 
 /** define product repository */
 export interface ProductRepository<T> {
@@ -6,4 +7,7 @@ export interface ProductRepository<T> {
     create(entity: T): Promise<AxiosResponseCustom>;
     getById(id: string): Promise<AxiosResponseCustom>;
     getAllSize(id: string): Promise<AxiosResponseCustom>;
+    getByCategoryId(id: string): Promise<AxiosResponseCustom>;
+    filter(entity: ProductsFilter): Promise<AxiosResponseCustom>;
+    addProductCart(entity: T): Promise<AxiosResponseCustom>;
 }

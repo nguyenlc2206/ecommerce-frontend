@@ -2,11 +2,12 @@
 import { Link } from 'react-router-dom';
 
 // import metarial ui
-import { Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 // import projects
 import AuthCardWrapper from '@ecommerce-frontend/src/application/journey/auth/components/AuthCardWrapper';
 import AuthVerifyOTPContent from '@ecommerce-frontend/src/application/journey/auth/components/AuthVerify';
+import AnimateButton from '@ecommerce-frontend/src/application/widgets/buttons/AnimateButton';
 
 // ================================|| AUTH VERIFY OTP - LOGIN ||================================ //
 
@@ -34,14 +35,21 @@ const VerifyOTPAuth = () => {
                         <Grid item>
                             <Stack alignItems='center' justifyContent='center' spacing={1}>
                                 <Typography
-                                    color={theme.palette.secondary[800]}
+                                    color={theme.palette.secondary.main}
                                     gutterBottom
                                     variant={matchDownSM ? 'h3' : 'h2'}
                                 >
-                                    Verify OTP
+                                    Enter Verification Code
                                 </Typography>
-                                <Typography variant='subtitle2' textAlign={matchDownSM ? 'center' : 'inherit'}>
-                                    Enter your credentials to continue
+                                <Typography variant='subtitle1' fontSize='1rem'>
+                                    We send you on mail.
+                                </Typography>
+                                <Typography
+                                    variant='caption'
+                                    fontSize='0.875rem'
+                                    textAlign={matchDownSM ? 'center' : 'inherit'}
+                                >
+                                    We’ve send you code on jone.****@gmail.com
                                 </Typography>
                             </Stack>
                         </Grid>
@@ -55,18 +63,32 @@ const VerifyOTPAuth = () => {
                 <Grid item xs={12}>
                     <Divider />
                 </Grid>
-
                 <Grid item xs={12}>
                     <Grid item container direction='column' alignItems='center' xs={12}>
                         <Typography
                             component={Link}
-                            to={'/register'}
+                            to='#'
                             variant='subtitle1'
                             sx={{ textDecoration: 'none' }}
+                            textAlign={matchDownSM ? 'center' : 'inherit'}
                         >
-                            Don&apos;t have an account?
+                            Did not receive the email? Check your spam filter, or
                         </Typography>
                     </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <AnimateButton>
+                        <Button
+                            disableElevation
+                            fullWidth
+                            size='large'
+                            type='submit'
+                            variant='outlined'
+                            color='secondary'
+                        >
+                            Resend Code
+                        </Button>
+                    </AnimateButton>
                 </Grid>
             </Grid>
         </AuthCardWrapper>

@@ -1,8 +1,7 @@
+// import libs
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 // reducer - state management
-import { LOGIN, LOGOUT } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 import accountReducer from '@ecommerce-frontend/src/infras/data/store/reducers/account';
 
 // import projects
@@ -18,7 +17,6 @@ import { InitialLoginContextProps, JWTContextType } from '@ecommerce-frontend/sr
 // import services
 import { LoginServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/login';
 import { RegisterServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/register';
-import { CheckAccountMeServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/checkAccountMe';
 import { ChangePasswordServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/changePassword';
 import { ForgotPasswordServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/forgotPassword';
 import { VerifyOTPServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/verifyOTP';
@@ -26,6 +24,7 @@ import { LogoutServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/
 import { UpdateProfileServiceImpl } from '@ecommerce-frontend/src/domain/services/account/update';
 import { DeleteAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/delete';
 import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { UpdateMeProfileServiceImpl } from '@ecommerce-frontend/src/domain/services/account/updateMe';
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -176,8 +175,15 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     };
 
     /** overiding updateMe function */
-    const updateMe = async (): Promise<Either<AccountModel, AppError>> => {
-        return success({} as AccountModel);
+    const updateMe = async (entity: AccountModel): Promise<Either<AccountModel, AppError>> => {
+        /** init services */
+        const updateMeProfileService = new UpdateMeProfileServiceImpl();
+        // * call service changepassword
+        const res = await updateMeProfileService.execute(entity);
+        // * error
+        if (res.isFailure()) return failure(res.error);
+        // * success
+        return success(res.data);
     };
 
     /** overiding delete function */
