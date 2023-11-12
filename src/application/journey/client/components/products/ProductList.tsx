@@ -30,7 +30,10 @@ const ProductsClientList = () => {
                                 image={item?.images[0]}
                                 name={item?.name}
                                 description={item?.description}
-                                offerPrice={item?.products[0]?.price * (item?.products[0]?.discount / 100)}
+                                offerPrice={
+                                    item?.products[0]?.price -
+                                    item?.products[0]?.price * (item?.products[0]?.discount / 100)
+                                }
                                 salePrice={item?.products[0]?.price}
                                 rating={2}
                                 item={item}

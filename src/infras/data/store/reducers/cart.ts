@@ -9,13 +9,17 @@ const initialState = {
     checkout: {
         step: '',
         products: [],
-        colors: [],
         totalQuantity: 0,
+        maxValues: {},
+        discounts: [],
         billingAddress: null,
-        payment: {
+        orderComplete: {
+            id: '',
+            status: false
+        },
+        paymentCharged: {
             type: 'free',
-            method: 'cod',
-            card: ''
+            method: 'card'
         }
     }
 };
@@ -27,16 +31,41 @@ const cart = createSlice({
         // add product to cart
         addProduct(state, action) {
             state.checkout.products = action.payload;
+            state.checkout.discounts = [];
+            state.checkout.billingAddress = null;
             state.checkout.totalQuantity = action.payload ? action.payload.length : 0;
-            const _colors: Array<string> = [];
-            action.payload.map((item: ProductModel) => {
-                _colors.push(item?.color);
-            });
-            state.checkout.colors = _colors;
         },
         // set step
         setStep(state, action) {
             state.checkout.step = action.payload;
+        },
+        // set maxvalue
+        setMaxValues(state, action) {
+            state.checkout.maxValues = action.payload;
+        },
+        // set discount
+        setDiscount(state, action) {
+            state.checkout.discounts = action.payload;
+        },
+        // set billing Address
+        setBillingAddress(state, action) {
+            state.checkout.billingAddress = action.payload;
+        },
+        // set payment
+        setPayment(state, action) {
+            state.checkout.paymentCharged = {
+                ...state.checkout.paymentCharged,
+                type: action.payload.type,
+                method: action.payload.method
+            };
+        },
+        // set order complete
+        setOrderComplete(state, action) {
+            state.checkout.orderComplete = {
+                ...state.checkout.orderComplete,
+                id: action.payload.id,
+                status: action.payload.status
+            };
         }
     }
 });
@@ -44,4 +73,5 @@ const cart = createSlice({
 // Reducer
 export default cart.reducer;
 
-export const { addProduct, setStep } = cart.actions;
+export const { addProduct, setStep, setMaxValues, setDiscount, setBillingAddress, setPayment, setOrderComplete } =
+    cart.actions;

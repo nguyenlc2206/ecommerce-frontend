@@ -1,13 +1,18 @@
-import { AxiosResponseCustom } from '@ecommerce-frontend/src/common/types';
+import { AxiosResponseCustom, KeyedObject } from '@ecommerce-frontend/src/common/types';
 import { ProductsFilter } from '@ecommerce-frontend/src/common/types/e-commerce';
 
 /** @todo: define product model reponse */
 export class ProductModel {
     id?: string;
+    productId?: string;
     name?: string;
     description?: string;
     categoryId?: string;
     sizes?: Array<string>;
+    image?: string;
+    discount?: number;
+    qty?: number;
+    colors?: Array<string>;
     color?: string;
     images?: Array<string>;
     isDeleted?: boolean;
@@ -23,6 +28,10 @@ export class ProductModel {
     totalSold?: number;
     products?: any;
     filter?: ProductsFilter;
+    sizeId?: number;
+    status?: string;
+    discounts?: KeyedObject;
+    billingAddress?: KeyedObject;
 
     fromProductModel?(res: AxiosResponseCustom) {
         const result = { ...res?.DT?.data };

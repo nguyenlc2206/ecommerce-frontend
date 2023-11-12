@@ -7,7 +7,7 @@ import { ProductRepository } from '@ecommerce-frontend/src/domain/repository/pro
 import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import { ProductsFilter } from '@ecommerce-frontend/src/common/types/e-commerce';
 
-// ==============================|| CATEGORY API ||============================== //
+// ==============================|| PRODUCT API ||============================== //
 
 @Service()
 export class ProductApi<T extends ProductModel> implements ProductRepository<T> {
@@ -53,6 +53,30 @@ export class ProductApi<T extends ProductModel> implements ProductRepository<T> 
     /** overiding add product cart method */
     async addProductCart(entity: T): Promise<AxiosResponseCustom> {
         const response = await axios.post('/api/v1/product/cart', { ...entity });
+        return response;
+    }
+
+    /** overiding query method */
+    async query(params: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/product/search?${params}`);
+        return response;
+    }
+
+    /** overiding get cart by account id */
+    async getCartByAccountId(): Promise<AxiosResponseCustom> {
+        const response = await axios.get('/api/v1/product/cart');
+        return response;
+    }
+
+    /** overiding update cart */
+    async updateCart(entity: T): Promise<AxiosResponseCustom> {
+        const response = await axios.patch('/api/v1/product/cart', { ...entity });
+        return response;
+    }
+
+    /** overifin delete cart */
+    async deleteCart(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.delete(`/api/v1/product/cart/${id}`);
         return response;
     }
 }

@@ -38,6 +38,7 @@
         "react-responsive-carousel": "^3.2.23",
         "react-router-dom": "^6.17.0",
         "react-slick": "^0.29.0",
+        "react-spinners": "^0.13.8",
         "react-timer-hook": "^3.0.7",
         "redux": "^4.2.1",
         "redux-persist": "^6.0.0",

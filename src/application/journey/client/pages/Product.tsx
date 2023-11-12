@@ -91,12 +91,7 @@ const ProductClientPage = () => {
 
     const { categorySelect } = useSelector((state) => state.category);
 
-    /** init service */
-    const service = new GetAllCategoryServiceImpl();
-
-    useEffect(() => {
-        service.execute();
-    });
+    useEffect(() => {});
 
     /** init config */
     const { borderRadius } = useConfig();

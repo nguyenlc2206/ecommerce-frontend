@@ -15,14 +15,17 @@ import Snackbar from '@ecommerce-frontend/src/application/widgets/notification/S
 
 import { JWTProvider as AuthProvider, setSession } from '@ecommerce-frontend/src/common/contexts/JWT';
 import { CheckAccountMeServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/checkAccountMe';
+import PageLoading from '@ecommerce-frontend/src/common/functions/Loading';
 
 // * import redux
-import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { LOGIN, LOGOUT } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 
 // ==============================|| APP CONFIG ||============================== //
 
 const App: FC = () => {
+    /** init redux */
+    const { pageLoading } = useSelector((state) => state.page);
     /** init hooks */
     const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -66,7 +69,7 @@ const App: FC = () => {
     React.useEffect(() => {
         InjectionInit();
         handleInitialApp();
-    }, []);
+    }, [pageLoading]);
 
     if (loading) return <Loader />;
 
@@ -79,6 +82,7 @@ const App: FC = () => {
                             <Notistack>
                                 <ThemeRoutes />
                                 <Snackbar />
+                                <PageLoading />
                             </Notistack>
                         </>
                     </AuthProvider>

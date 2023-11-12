@@ -1,6 +1,6 @@
 // import projects
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { useState } from 'react';
 import * as _ from 'lodash';
 
 // import material ui
@@ -47,9 +47,13 @@ import { useFormik, Form, FormikProvider, useField, FieldHookConfig } from 'form
 import * as yup from 'yup';
 
 // import products
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { ColorsOptionsProps } from '@ecommerce-frontend/src/common/types/e-commerce';
-import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/product/addProductCart';
+import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/addCart';
+import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
+import { SearchProductsServiceImpl } from '@ecommerce-frontend/src/domain/services/product/search';
+import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
 
 // product color select
 function getColor(color: string) {
@@ -64,6 +68,7 @@ const validationSchema = yup.object({
 
 const Colors = ({ checked, colorsData }: { checked?: boolean; colorsData: ColorsOptionsProps[] }) => {
     const theme = useTheme();
+
     return (
         <Grid item>
             <Tooltip title={colorsData[0].label}>
@@ -127,8 +132,26 @@ const Increment = (props: string | FieldHookConfig<any>) => {
 
 const ProductInfo = () => {
     // init redux
-    const { productSelect, options } = useSelector((state) => state.product);
+    const { productSelect } = useSelector((state) => state.product);
+    const { products: productsCart } = useSelector((state) => state.cart.checkout);
+
     const [color, setColor] = React.useState<string>('');
+    const [size, setSize] = React.useState<string>('');
+    const [stock, setStock] = React.useState<boolean>(true);
+    // useEffect processing product in stock
+    React.useEffect(() => {
+        let _stock = false;
+        if (productSelect?.products.length && productSelect?.products.length === 1) {
+            if (productSelect?.products[0]?.totalQty === 0) _stock = false;
+            else _stock = true;
+        } else {
+            productSelect?.products.length &&
+                productSelect?.products.map((item: ProductModel) => {
+                    _stock = _stock || item?.totalQty !== 0;
+                });
+        }
+        setStock(_stock);
+    }, [productSelect]);
 
     // init formik form
     const formik = useFormik({
@@ -144,28 +167,61 @@ const ProductInfo = () => {
             quantity: 1
         },
         validationSchema,
-        onSubmit: (values) => {}
+        onSubmit: (values) => {
+            // console.log(values?.quantity);
+        }
     });
 
     const { values, errors, handleSubmit, handleChange } = formik;
 
     /** handle add to cart products */
     const handleAddProduct = async () => {
-        const products = productSelect.products;
-        const productFinded = _.find(products, { id: values?.color });
-        const data = {
-            id: values?.id,
-            name: values?.name,
-            size: productFinded?.size,
-            color: productFinded?.color,
-            qty: 1,
-            discount: productFinded?.discount,
-            price: productFinded?.price,
-            iimage: values?.image
-        };
+        if (stock && values?.color && values?.size) {
+            const productFinded = _.find(productSelect?.products, { color: values?.color, size: values?.size });
+            const productCheck = _.find(productsCart, { color: values?.color, size: values?.size });
+            // check products color is exsits in cart
+
+            if (productCheck) {
+                // product color and size is exists in cart
+                const productClone = _.cloneDeep(productsCart);
+                _.set(_.find(productClone, { id: productCheck?.id }), 'qty', productCheck?.qty + 1);
+                const serivce = new UpdateCartServiceImpl();
+                const res = await serivce.execute({ products: productClone });
+            } else {
+                const data = {
+                    productId: productSelect?.id,
+                    id: productFinded?.id,
+                    name: values?.name,
+                    size: productFinded?.size,
+                    color: productFinded?.color,
+                    qty: values?.quantity,
+                    totalQty: productFinded?.totalQty,
+                    discount: productFinded?.discount,
+                    price: productFinded?.price,
+                    image: values?.image
+                };
+                // init service
+                const service = new AddProductCartServiceImpl();
+                const res = await service.execute({ products: data });
+            }
+        } else {
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'Product is out of stock!',
+                    variant: 'alert',
+                    alert: { color: 'error' },
+                    close: false
+                })
+            );
+        }
+    };
+
+    /** handle query products */
+    const handleQueryProduct = async (data: ProductModel) => {
         // init service
-        const service = new AddProductCartServiceImpl();
-        const res = await service.execute({ products: data });
+        const service = new SearchProductsServiceImpl();
+        const res = await service.execute(data);
     };
 
     return (
@@ -175,9 +231,9 @@ const ProductInfo = () => {
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
                             <Chip
-                                size='small'
-                                label={'Out of Stock'}
-                                chipcolor={'error'}
+                                size='medium'
+                                label={stock ? 'In Stock' : 'Out of Stock'}
+                                chipcolor={stock ? 'success' : 'error'}
                                 sx={{ borderRadius: '4px', textTransform: 'capitalize' }}
                             />
                         </Grid>
@@ -206,7 +262,9 @@ const ProductInfo = () => {
             <Grid item xs={12}>
                 <Stack direction='row' alignItems='center' spacing={1}>
                     <Typography variant='h2' color='primary'>
-                        ${productSelect?.products[0].price * (productSelect?.products[0].discount / 100)}
+                        $
+                        {productSelect?.products[0].price -
+                            productSelect?.products[0].price * (productSelect?.products[0].discount / 100)}
                     </Typography>
                     <Typography variant='body1' sx={{ textDecoration: 'line-through' }}>
                         ${productSelect?.products[0].price}
@@ -237,19 +295,27 @@ const ProductInfo = () => {
                                                 <RadioGroup
                                                     row
                                                     value={values.color}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setColor(e.target.value);
+                                                        handleQueryProduct({
+                                                            id: productSelect?.id,
+                                                            color: e.target.value,
+                                                            size: size
+                                                        } as ProductModel);
+                                                    }}
                                                     aria-label='colors'
                                                     name='color'
                                                     id='color'
                                                     sx={{ ml: 1 }}
                                                 >
-                                                    {options.colors &&
-                                                        options.colors.map((item, index) => {
-                                                            const colorsData = getColor(item.value);
+                                                    {productSelect.colors &&
+                                                        productSelect.colors.map((item, index) => {
+                                                            const colorsData = getColor(item);
                                                             return (
                                                                 <FormControlLabel
                                                                     key={index}
-                                                                    value={item.id}
+                                                                    value={item}
                                                                     control={
                                                                         <Radio
                                                                             sx={{ p: 0.25 }}
@@ -300,7 +366,15 @@ const ProductInfo = () => {
                                                         id='size'
                                                         name='size'
                                                         value={values.size}
-                                                        onChange={handleChange}
+                                                        onChange={(e) => {
+                                                            handleChange(e);
+                                                            setSize(e.target.value);
+                                                            handleQueryProduct({
+                                                                id: productSelect?.id,
+                                                                size: e.target.value,
+                                                                color: color
+                                                            } as ProductModel);
+                                                        }}
                                                         displayEmpty
                                                         inputProps={{ 'aria-label': 'Without label' }}
                                                     >
@@ -339,6 +413,7 @@ const ProductInfo = () => {
                                 <Grid container spacing={1}>
                                     <Grid item xs={6}>
                                         <Button
+                                            type='submit'
                                             fullWidth
                                             color='primary'
                                             variant='contained'

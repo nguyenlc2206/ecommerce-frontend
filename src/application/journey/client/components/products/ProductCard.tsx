@@ -1,5 +1,7 @@
+// import libs
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import * as _ from 'lodash';
 
 // material-ui
 import { Button, CardContent, CardMedia, Grid, Rating, Stack, Typography } from '@mui/material';
@@ -9,7 +11,9 @@ import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 import { ProductCardProps } from '@ecommerce-frontend/src/common/types/cart';
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
-import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/product/addProductCart';
+import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/addCart';
+import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
 
 // project import
 
@@ -19,6 +23,8 @@ const ProductCard = ({ id, name, image, description, offerPrice, salePrice, rati
     /** init variable hooks */
     const [productRating] = useState<number | undefined>(rating);
 
+    const { products } = useSelector((state) => state.cart.checkout);
+
     const [isLoading, setLoading] = useState(true);
     useEffect(() => {
         setLoading(false);
@@ -26,21 +32,30 @@ const ProductCard = ({ id, name, image, description, offerPrice, salePrice, rati
 
     /** handle add product cart */
     const handleAddProduct = async (item: ProductModel) => {
-        // processing data
-        const data = {
-            id: item?.products[0]?.id,
-            name: item?.name,
-            size: item?.products[0]?.size,
-            color: item?.products[0]?.color,
-            qty: 1,
-            discount: item?.products[0]?.discount,
-            price: item?.products[0]?.price,
-            image: item?.images[0]
-        };
-        // console.log(data);
-        // init service
-        const service = new AddProductCartServiceImpl();
-        const res = await service.execute({ products: data });
+        const productFinded = _.find(products, { id: item?.products[0]?.id });
+        if (productFinded) {
+            const data = _.cloneDeep(products);
+            _.set(_.find(data, { id: item?.products[0]?.id }), 'qty', productFinded?.qty + 1);
+            const serivce = new UpdateCartServiceImpl();
+            const res = await serivce.execute({ products: data });
+        } else {
+            // processing data
+            const data = {
+                productId: item?.id,
+                id: item?.products[0]?.id,
+                name: item?.name,
+                size: item?.products[0]?.size,
+                color: item?.products[0]?.color,
+                qty: 1,
+                totalQty: item?.products[0]?.totalQty,
+                discount: item?.products[0]?.discount,
+                price: item?.products[0]?.price,
+                image: item?.images[0]
+            };
+            // init service
+            const service = new AddProductCartServiceImpl();
+            const res = await service.execute({ products: data });
+        }
     };
 
     return (
