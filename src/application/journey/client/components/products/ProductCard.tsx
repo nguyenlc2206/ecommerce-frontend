@@ -1,5 +1,5 @@
 // import libs
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as _ from 'lodash';
 
@@ -12,8 +12,9 @@ import { ProductCardProps } from '@ecommerce-frontend/src/common/types/cart';
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/addCart';
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 // project import
 
@@ -24,11 +25,8 @@ const ProductCard = ({ id, name, image, description, offerPrice, salePrice, rati
     const [productRating] = useState<number | undefined>(rating);
 
     const { products } = useSelector((state) => state.cart.checkout);
-
-    const [isLoading, setLoading] = useState(true);
-    useEffect(() => {
-        setLoading(false);
-    }, []);
+    const { pageLoading } = useSelector((state) => state.page);
+    React.useEffect(() => {}, []);
 
     /** handle add product cart */
     const handleAddProduct = async (item: ProductModel) => {
@@ -56,6 +54,7 @@ const ProductCard = ({ id, name, image, description, offerPrice, salePrice, rati
             const service = new AddProductCartServiceImpl();
             const res = await service.execute({ products: data });
         }
+        dispatch(setLoading(false));
     };
 
     return (

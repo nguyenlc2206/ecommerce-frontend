@@ -14,4 +14,7 @@ export interface ProductRepository<T> {
     getCartByAccountId(): Promise<AxiosResponseCustom>;
     updateCart(entity: T): Promise<AxiosResponseCustom>;
     deleteCart(id: string): Promise<AxiosResponseCustom>;
+    deleteProduct(id: string): Promise<AxiosResponseCustom>;
+    activeProduct(id: string): Promise<AxiosResponseCustom>;
+    createSizeProduct(entity: T): Promise<AxiosResponseCustom>;
 }

@@ -15,32 +15,35 @@ import ProductEmpty from '@ecommerce-frontend/src/application/journey/client/com
 const ProductsClientList = () => {
     /** init variable */
     const { products } = useSelector((state) => state.product);
+    const [rows, setRows] = React.useState<ProductModel[]>(
+        Object.values(products).filter((item) => item?.isDeleted !== true)
+    );
 
     /** useEffect */
-    React.useEffect(() => {}, []);
+    React.useEffect(() => {
+        setRows(Object.values(products).filter((item) => item?.isDeleted !== true));
+    }, [products]);
 
     return (
         <>
-            {Object.values(products).length ? (
-                Object.values(products).map((item: ProductModel) => {
-                    return (
-                        <Grid key={item?.id} item xs={12} sm={6} md={4} lg={2.5}>
-                            <ProductCard
-                                id={item?.id}
-                                image={item?.images[0]}
-                                name={item?.name}
-                                description={item?.description}
-                                offerPrice={
-                                    item?.products[0]?.price -
-                                    item?.products[0]?.price * (item?.products[0]?.discount / 100)
-                                }
-                                salePrice={item?.products[0]?.price}
-                                rating={2}
-                                item={item}
-                            />
-                        </Grid>
-                    );
-                })
+            {rows.length ? (
+                rows.map((item: ProductModel) => (
+                    <Grid key={item?.id} item xs={12} sm={6} md={4} lg={2.5}>
+                        <ProductCard
+                            id={item?.id}
+                            image={item?.images[0]}
+                            name={item?.name}
+                            description={item?.description}
+                            offerPrice={
+                                item?.products[0]?.price -
+                                item?.products[0]?.price * (item?.products[0]?.discount / 100)
+                            }
+                            salePrice={item?.products[0]?.price}
+                            rating={2}
+                            item={item}
+                        />
+                    </Grid>
+                ))
             ) : (
                 <Grid item xs={12} sx={{ mt: 3 }}>
                     <ProductEmpty />

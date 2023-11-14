@@ -13,7 +13,7 @@ import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 import { setOrderComplete } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
-import { setOrder } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
+import { setOrder, setURLCardPayemnt } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
 
 /** define auth services */
 export interface CreateOrderService<Entity> {
@@ -66,8 +66,9 @@ export class CreateOrderServiceImpl<Entity extends OrderModel> implements Create
             })
         );
         dispatch(setLoading(false));
-        dispatch(setOrderComplete({ id: result?.orderNumber, status: true }));
         dispatch(setOrder(result));
+        dispatch(setURLCardPayemnt(result?.url));
+        dispatch(setOrderComplete({ id: result?.orderNumber, status: true }));
         return success(result);
     }
 }

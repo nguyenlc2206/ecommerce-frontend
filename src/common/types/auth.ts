@@ -27,6 +27,12 @@ export type JWTContextType = {
         password: string,
         passwordConfirm: string
     ) => Promise<Either<AccountModel, AppError>>;
+    changePasswordAdmin: (
+        id: string,
+        passwordCurrent: string,
+        password: string,
+        passwordConfirm: string
+    ) => Promise<Either<AccountModel, AppError>>;
     forgotPassword: (email: string) => Promise<Either<AccountModel, AppError>>;
     verifyOTP: (password: string, passwordConfirm: string, OTP: string) => Promise<Either<AccountModel, AppError>>;
     updateProfile: (entity: AccountModel) => Promise<Either<AccountModel, AppError>>;

@@ -22,7 +22,14 @@ export class ProductApi<T extends ProductModel> implements ProductRepository<T> 
 
     /** overiding create method */
     async create(entity: T): Promise<AxiosResponseCustom> {
-        const response = await axios.post(`/api/v1/product`, { ...entity });
+        const formData = new FormData();
+        formData.append('name', entity?.name);
+        formData.append('description', entity?.description);
+        formData.append('categoryId', entity?.categoryId);
+        entity?.sizes.map((item: any) => formData.append('sizes[]', item));
+        Array.from(entity?.images).map((item: any) => formData.append('images', item, item?.name));
+
+        const response = await axios.post(`/api/v1/product`, formData);
         return response;
     }
 
@@ -77,6 +84,24 @@ export class ProductApi<T extends ProductModel> implements ProductRepository<T> 
     /** overifin delete cart */
     async deleteCart(id: string): Promise<AxiosResponseCustom> {
         const response = await axios.delete(`/api/v1/product/cart/${id}`);
+        return response;
+    }
+
+    /** overiding deleteProduct method */
+    async deleteProduct(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.delete(`/api/v1/product/${id}`);
+        return response;
+    }
+
+    /** overiding active product */
+    async activeProduct(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/product/active/${id}`);
+        return response;
+    }
+
+    /** overiding createSizeProduct product */
+    async createSizeProduct(entity: T): Promise<AxiosResponseCustom> {
+        const response = await axios.post(`/api/v1/product/size`, { ...entity });
         return response;
     }
 }

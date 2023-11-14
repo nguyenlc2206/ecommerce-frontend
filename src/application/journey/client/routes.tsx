@@ -3,7 +3,7 @@ import { lazy } from 'react';
 
 // import projects
 import Loadable from '@ecommerce-frontend/src/common/functions/Loadable';
-import AuthGuard from '@ecommerce-frontend/src/application/routes/AuthGuard';
+import AuthGuardClient from '@ecommerce-frontend/src/application/routes/AuthGuardClient';
 import MainClient from '@ecommerce-frontend/src/application/journey/client/main';
 
 // client page
@@ -24,9 +24,9 @@ const CheckoutPage = Loadable(lazy(() => import('@ecommerce-frontend/src/applica
 const ClientRoutes = {
     path: '/',
     element: (
-        <AuthGuard>
+        <AuthGuardClient>
             <MainClient />
-        </AuthGuard>
+        </AuthGuardClient>
     ),
     children: [
         { index: true, element: <WelcomePage /> },

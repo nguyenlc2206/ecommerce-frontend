@@ -16,26 +16,19 @@ export type GuardProps = {
     children: ReactElement | null;
 };
 
-const AuthGuard = ({ children }: GuardProps) => {
+const AuthGuardClient = ({ children }: GuardProps) => {
     // const { isLoggedIn } = useAuth();
     const { account, isLoggedIn } = useSelector((state) => state.account);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (account?.role !== 'admin') {
-            navigate('/', { replace: true });
-        }
         if (!isLoggedIn) {
             navigate('/login', { replace: true });
         }
     }, [isLoggedIn, navigate]);
 
-    if (account?.role !== 'admin') {
-        return <Loader />;
-    }
-
     return children;
 };
 
-export default AuthGuard;
+export default AuthGuardClient;

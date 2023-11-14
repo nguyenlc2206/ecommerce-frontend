@@ -21,10 +21,11 @@ import { ChangePasswordServiceImpl } from '@ecommerce-frontend/src/domain/servic
 import { ForgotPasswordServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/forgotPassword';
 import { VerifyOTPServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/verifyOTP';
 import { LogoutServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/logout';
-import { UpdateProfileServiceImpl } from '@ecommerce-frontend/src/domain/services/account/update';
+import { UpdateAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/update';
 import { DeleteAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/delete';
 import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { UpdateMeProfileServiceImpl } from '@ecommerce-frontend/src/domain/services/account/updateMe';
+import { ChangePasswordAdminServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/changePasswordAdmin';
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -125,6 +126,26 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         return success(res.data);
     };
 
+    /** overding changePasswordAdmin function */
+    const changePasswordAdmin = async (
+        id: string,
+        passwordCurrent: string,
+        password: string,
+        passwordConfirm: string
+    ): Promise<Either<AccountModel, AppError>> => {
+        /** init services */
+        const changePasswordService = new ChangePasswordAdminServiceImpl();
+        // * call service changepassword
+        const res = await changePasswordService.execute({
+            id: id,
+            data: { passwordCurrent: passwordCurrent, password: password, passwordConfirm: passwordConfirm }
+        } as AccountModel);
+        // * error
+        if (res.isFailure()) return failure(res.error);
+        // * success
+        return success(res.data);
+    };
+
     /** overiding forgotPassword function */
     const forgotPassword = async (email: string): Promise<Either<AccountModel, AppError>> => {
         /** init services */
@@ -165,9 +186,9 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     /** overiding updateProfile function */
     const updateProfile = async (entity: AccountModel): Promise<Either<AccountModel, AppError>> => {
         /** init services */
-        const updateProfileService = new UpdateProfileServiceImpl();
-        // * call service changepassword
-        const res = await updateProfileService.execute(entity);
+        const updateAccountService = new UpdateAccountServiceImpl();
+        // * call service update profile
+        const res = await updateAccountService.execute(entity);
         // * error
         if (res.isFailure()) return failure(res.error);
         // * success
@@ -206,6 +227,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
                 logout,
                 register,
                 changePassword,
+                changePasswordAdmin,
                 forgotPassword,
                 verifyOTP,
                 updateProfile,

@@ -9,18 +9,20 @@ import { AccountApi } from '@ecommerce-frontend/src/infras/data/remote/accountAp
 import AppError from '@ecommerce-frontend/src/common/functions/AppError';
 
 // import redux
-import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, store } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { GetAllAccountService, GetAllAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/getAll';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
+import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 
 /** define updateProfile services */
-export interface DeleteService<Entity> {
+export interface DeleteAccountService<Entity> {
     execute(id: string): Promise<Either<string, AppError>>;
 }
 
 // ==============================|| DELETE SERVICE IMPLEMENT ||============================== //
 
-export class DeleteAccountServiceImpl<Entity extends AccountModel> implements DeleteService<Entity> {
+export class DeleteAccountServiceImpl<Entity extends AccountModel> implements DeleteAccountService<Entity> {
     /** init api */
     private accountApi: AccountRepository<AccountModel>;
     /** init service */
@@ -34,6 +36,7 @@ export class DeleteAccountServiceImpl<Entity extends AccountModel> implements De
 
     /** overiding execute method */
     async execute(id: string): Promise<Either<string, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.accountApi.delete(id);
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -46,6 +49,7 @@ export class DeleteAccountServiceImpl<Entity extends AccountModel> implements De
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -60,8 +64,8 @@ export class DeleteAccountServiceImpl<Entity extends AccountModel> implements De
             })
         );
         /** get all account */
-        this.getAllService.execute();
-
+        const _res = await this.getAllService.execute();
+        dispatch(activeUser({ ...store.getState().user.userSelect, isDeleted: true }));
         return success('okie');
     }
 }

@@ -36,4 +36,23 @@ export class CategoryApi<T extends CategoryModel> implements CategoryRepository<
         const response = await axios.delete(`/api/v1/category/${id}`);
         return response;
     }
+
+    /** overding update method */
+    async update(entity: T): Promise<AxiosResponseCustom> {
+        const formData = new FormData();
+        if (!entity?.image) {
+            formData.append('name', entity?.name);
+        } else {
+            formData.append('name', entity?.name);
+            formData.append('image', entity?.image, entity?.image?.name);
+        }
+        const response = await axios.patch(`/api/v1/category/${entity?.id}`, formData);
+        return response;
+    }
+
+    /** overiding active category */
+    async activeCategory(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/category/active/${id}`);
+        return response;
+    }
 }

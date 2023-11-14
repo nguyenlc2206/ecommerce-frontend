@@ -12,6 +12,7 @@ import AppError from '@ecommerce-frontend/src/common/functions/AppError';
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { getListUsers } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface GetAllAccountService<Entity> {
@@ -31,6 +32,7 @@ export class GetAllAccountServiceImpl<Entity extends AccountModel> implements Ge
 
     /** overiding execute method */
     async execute(): Promise<Either<AccountModel[], AppError>> {
+        dispatch(setLoading(true));
         const res = await this.accountApi.getAll();
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -43,6 +45,7 @@ export class GetAllAccountServiceImpl<Entity extends AccountModel> implements Ge
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -51,7 +54,7 @@ export class GetAllAccountServiceImpl<Entity extends AccountModel> implements Ge
 
         /** save data to redux */
         dispatch(getListUsers(result));
-
+        dispatch(setLoading(false));
         return success(result as AccountModel[]);
     }
 }

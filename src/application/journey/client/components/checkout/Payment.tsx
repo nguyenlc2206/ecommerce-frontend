@@ -29,6 +29,9 @@ import PaymentSelect from '@ecommerce-frontend/src/application/journey/client/co
 import ColorOptions from '@ecommerce-frontend/src/application/journey/client/components/products/filter/ColorOptions';
 import Avatar from '@ecommerce-frontend/src/application/widgets/avatar/Avatar';
 import OrderSummary from '@ecommerce-frontend/src/application/journey/client/components/checkout/OrderSummary';
+import AddressCard from '@ecommerce-frontend/src/application/journey/client/components/checkout/AddressCard';
+import OrderComplete from '@ecommerce-frontend/src/application/journey/client/components/checkout/OrderComplete';
+import { OrderModel } from '@ecommerce-frontend/src/domain/entities/Order';
 
 // assets
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -36,11 +39,10 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // import redux
 import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
-import AddressCard from '@ecommerce-frontend/src/application/journey/client/components/checkout/AddressCard';
 import { setPayment } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
+
+// import service
 import { CreateOrderServiceImpl } from '@ecommerce-frontend/src/domain/services/order/create';
-import { OrderModel } from '@ecommerce-frontend/src/domain/entities/Order';
-import OrderComplete from '@ecommerce-frontend/src/application/journey/client/components/checkout/OrderComplete';
 
 // product color select
 function getColor(color: string) {
@@ -92,6 +94,7 @@ const PaymentCheckout = ({ onBack, onNext }: PaymentProps) => {
         const service = new CreateOrderServiceImpl();
         const res = await service.execute(data);
         if (res.isFailure()) return;
+
         onNext();
     };
 

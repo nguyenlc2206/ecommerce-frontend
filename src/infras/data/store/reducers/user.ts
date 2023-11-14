@@ -8,7 +8,7 @@ import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 
 const initialState = {
     users: [] as AccountModel[],
-    userSelect: {} as AccountModel
+    userSelect: null
 };
 
 const user = createSlice({

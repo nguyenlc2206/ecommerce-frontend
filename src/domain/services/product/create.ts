@@ -10,13 +10,14 @@ import { ProductApi } from '@ecommerce-frontend/src/infras/data/remote/product.A
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { GetAllProductService, GetAllProductServiceImpl } from '@ecommerce-frontend/src/domain/services/product/getAll';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define auth services */
 export interface CreateProductService<Entity> {
     execute(entity: Entity): Promise<Either<ProductModel, AppError>>;
 }
 
-// ==============================|| CREATE CATEGORY IMPLEMENT ||============================== //
+// ==============================|| CREATE PRODUCTS IMPLEMENT ||============================== //
 
 @Service()
 export class CreateProductServiceImpl<Entity extends ProductModel> implements CreateProductService<Entity> {
@@ -32,6 +33,7 @@ export class CreateProductServiceImpl<Entity extends ProductModel> implements Cr
 
     /** overiding execute method */
     async execute(entity: Entity): Promise<Either<ProductModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.productApi.create(entity);
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -44,6 +46,7 @@ export class CreateProductServiceImpl<Entity extends ProductModel> implements Cr
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -60,8 +63,8 @@ export class CreateProductServiceImpl<Entity extends ProductModel> implements Cr
             })
         );
         /** fetch return */
-        this.getAllProductService.execute();
-
+        const _res = await this.getAllProductService.execute();
+        dispatch(setLoading(false));
         return success(result);
     }
 }

@@ -6,4 +6,6 @@ export interface CategoryRepository<T> {
     getById(id: string): Promise<AxiosResponseCustom>;
     create(entity: T): Promise<AxiosResponseCustom>;
     delete(id: string): Promise<AxiosResponseCustom>;
+    update(entity: T): Promise<AxiosResponseCustom>;
+    activeCategory(id: string): Promise<AxiosResponseCustom>;
 }

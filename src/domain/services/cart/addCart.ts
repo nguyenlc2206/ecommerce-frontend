@@ -12,6 +12,7 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { addProduct, setStep } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface AddProductCartService<Entity> {
@@ -31,6 +32,7 @@ export class AddProductCartServiceImpl<Entity extends ProductModel> implements A
 
     /** overiding execute method */
     async execute(entity: Entity): Promise<Either<ProductModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.productApi.addProductCart(entity);
         if (res?.EC !== 200) {
             /** open snackbar alert */

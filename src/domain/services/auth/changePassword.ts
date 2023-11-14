@@ -31,7 +31,18 @@ export class ChangePasswordServiceImpl<Entity extends AccountModel> implements C
     async execute(entity: Entity): Promise<Either<AccountModel, AppError>> {
         const res = await this.authApi.changePassword(entity);
         // * error
-        if (res?.EC !== 200) return failure(new AppError(res?.EM, res?.EC));
+        if (res?.EC !== 200) {
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: res.EM,
+                    variant: 'alert',
+                    alert: { color: 'error' },
+                    close: false
+                })
+            );
+            return failure(new AppError(res?.EM, res?.EC));
+        }
 
         const _init = new AccountModel();
         const result = _init.fromAccountModel(res);

@@ -31,5 +31,9 @@
     "product-category": "Loại sản phẩm",
     "product-status": "Trạng thái",
     "product-images": "Hình ảnh",
-    "product-actions": "Thao tác"
+    "product-actions": "Thao tác",
+    "product-quantity": "Số lượng",
+
+    "account-settings": "Account Setting",
+    "logout": "Logout"
 }

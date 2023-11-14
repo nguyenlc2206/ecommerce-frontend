@@ -34,9 +34,23 @@ const reducer = combineReducers({
         categoryReducer
     ),
     snackbar: snackbarReducer,
-    menu: menuReducer,
+    menu: persistReducer(
+        {
+            key: 'menu',
+            storage,
+            keyPrefix: 'ecommerce-'
+        },
+        menuReducer
+    ),
     account: accountReducer,
-    user: userReducer,
+    user: persistReducer(
+        {
+            key: 'user',
+            storage,
+            keyPrefix: 'ecommerce-'
+        },
+        userReducer
+    ),
     product: productReducer,
     page: pageReducer,
     order: orderReducer

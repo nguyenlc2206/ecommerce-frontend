@@ -9,7 +9,7 @@ import { AccountApi } from '@ecommerce-frontend/src/infras/data/remote/accountAp
 import AppError from '@ecommerce-frontend/src/common/functions/AppError';
 
 // import redux
-import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, store } from '@ecommerce-frontend/src/infras/data/store';
 import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 
@@ -17,15 +17,16 @@ import {
     GetAccountByIdService,
     GetAccountByIdServiceImpl
 } from '@ecommerce-frontend/src/domain/services/account/getAccountById';
+import { LOGIN } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 
-/** define updateProfile services */
-export interface UpdateProfileService<Entity> {
+/** define UpdateAccount services */
+export interface UpdateAccountService<Entity> {
     execute(entity: Entity): Promise<Either<AccountModel, AppError>>;
 }
 
-// ==============================|| UPDATE PROFILE SERVICE IMPLEMENT ||============================== //
+// ==============================|| UPDATE ACCOUNT SERVICE IMPLEMENT ||============================== //
 
-export class UpdateProfileServiceImpl<Entity extends AccountModel> implements UpdateProfileService<Entity> {
+export class UpdateAccountServiceImpl<Entity extends AccountModel> implements UpdateAccountService<Entity> {
     private accountApi: AccountRepository<AccountModel>;
     /** init services */
     private getAccoutById: GetAccountByIdService<AccountModel>;
@@ -38,7 +39,7 @@ export class UpdateProfileServiceImpl<Entity extends AccountModel> implements Up
 
     /** overiding execute method */
     async execute(entity: Entity): Promise<Either<AccountModel, AppError>> {
-        const res = await this.accountApi.updateProfile(entity);
+        const res = await this.accountApi.updateAccount(entity);
         if (res?.EC !== 200) {
             /** open snackbar alert */
             dispatch(
@@ -69,6 +70,12 @@ export class UpdateProfileServiceImpl<Entity extends AccountModel> implements Up
                 close: false
             })
         );
+
+        /** update header */
+        if (result?.id === store.getState().account.account?.id) {
+            /** save data to redux */
+            dispatch({ type: LOGIN, payload: { isLoggedIn: true, account: { ...result } } });
+        }
 
         return success(result as AccountModel);
     }

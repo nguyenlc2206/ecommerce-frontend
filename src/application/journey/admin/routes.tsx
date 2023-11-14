@@ -4,30 +4,22 @@ import { lazy } from 'react';
 // import projects
 import Loadable from '@ecommerce-frontend/src/common/functions/Loadable';
 import MainAdminLayout from '@ecommerce-frontend/src/application/journey/admin/main';
-import AuthGuard from '@ecommerce-frontend/src/application/routes/AuthGuard';
+import AuthGuardAdmin from '@ecommerce-frontend/src/application/routes/AuthGuardAdmin';
 
 // * admin pages
 const AdminDashboard = Loadable(
     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/Dashboard'))
 );
-const AdminUsers = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/users/Users')));
-// const UserDetail = Loadable(
-//     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/users/UserDetail'))
-// );
+const AdminUsers = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/users')));
 
 const AdminCategories = Loadable(
-    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/categories/Categories'))
+    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/categories'))
 );
-// const CategoryDetail = Loadable(
-//     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/categories/CategoryDetail'))
-// );
 
-const AdminProducts = Loadable(
-    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/products/Products'))
+const AdminProducts = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/products')));
+const AdminProductDetail = Loadable(
+    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/products/ProductDetail'))
 );
-// const ProductDetail = Loadable(
-//     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/products/ProductDetail'))
-// );
 
 const AdminOrders = Loadable(
     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/orders/Orders'))
@@ -41,18 +33,16 @@ const AdminCoupons = Loadable(
 const AdminRoutes = {
     path: '/admin',
     element: (
-        <AuthGuard>
+        <AuthGuardAdmin>
             <MainAdminLayout />
-        </AuthGuard>
+        </AuthGuardAdmin>
     ),
     children: [
         { index: true, element: <AdminDashboard /> },
         { path: 'users', element: <AdminUsers /> },
-        // { path: 'users/:id', element: <UserDetail /> },
-        { path: 'category', element: <AdminCategories /> },
-        // { path: 'category/:id', element: <CategoryDetail /> },
+        { path: 'categories', element: <AdminCategories /> },
         { path: 'products', element: <AdminProducts /> },
-        // { path: 'products/:id', element: <ProductDetail /> },
+        { path: 'products/:id', element: <AdminProductDetail /> },
         { path: 'orders', element: <AdminOrders /> },
         { path: 'coupons', element: <AdminCoupons /> }
     ]

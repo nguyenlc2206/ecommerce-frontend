@@ -54,4 +54,10 @@ export class AuthApi<T extends AccountModel> implements AuthRepository<T> {
         const response = await axios.get('/api/v1/logout');
         return response;
     }
+
+    /** overiding changePasswordAdmin method */
+    async changePasswordAdmin(entity: T): Promise<AxiosResponseCustom> {
+        const response = await axios.patch(`/api/v1/change-password/admin/${entity?.id}`, { ...entity.data });
+        return response;
+    }
 }

@@ -15,15 +15,16 @@ import {
 // import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define updateProfile services */
-export interface DeleteService<Entity> {
+export interface DeleteCategoryService<Entity> {
     execute(id: string): Promise<Either<string, AppError>>;
 }
 
 // ==============================|| DELETE SERVICE IMPLEMENT ||============================== //
 
-export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements DeleteService<Entity> {
+export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements DeleteCategoryService<Entity> {
     /** init api */
     private categoryApi: CategoryRepository<CategoryModel>;
     /** init service */
@@ -37,6 +38,7 @@ export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements 
 
     /** overiding execute method */
     async execute(id: string): Promise<Either<string, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.categoryApi.delete(id);
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -63,8 +65,7 @@ export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements 
             })
         );
         /** get all account */
-        this.getAllService.execute();
-
+        const _res = await this.getAllService.execute();
         return success('okie');
     }
 }

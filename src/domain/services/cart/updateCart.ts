@@ -17,6 +17,7 @@ import {
     setDiscount,
     setStep
 } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface UpdateCartService<Entity> {
@@ -36,6 +37,7 @@ export class UpdateCartServiceImpl<Entity extends ProductModel> implements Updat
 
     /** overiding execute method */
     async execute(entity: Entity): Promise<Either<ProductModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.productApi.updateCart(entity);
         if (res?.EC !== 200) {
             /** open snackbar alert */

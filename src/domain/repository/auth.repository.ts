@@ -6,6 +6,7 @@ export interface AuthRepository<T> {
     checkAccountMe(): Promise<AxiosResponseCustom>;
     register(entity: T): Promise<AxiosResponseCustom>;
     changePassword(entity: T): Promise<AxiosResponseCustom>;
+    changePasswordAdmin(entity: T): Promise<AxiosResponseCustom>;
     forgotPassword(entity: T): Promise<AxiosResponseCustom>;
     verifyOTP(entity: T): Promise<AxiosResponseCustom>;
     logout(): Promise<AxiosResponseCustom>;

@@ -7,7 +7,8 @@ import { OrderModel } from '@ecommerce-frontend/src/domain/entities/Order';
 // ----------------------------------------------------------------------
 
 const initialState = {
-    order: {} as OrderModel
+    order: {} as OrderModel,
+    urlCardPayment: ''
 };
 
 const order = createSlice({
@@ -16,6 +17,11 @@ const order = createSlice({
     reducers: {
         setOrder(state, action) {
             state.order = action.payload;
+        },
+        // set card url payment
+        setURLCardPayemnt(state, action) {
+            window.open(action.payload, '_blank', 'noreferrer');
+            state.urlCardPayment = action.payload;
         }
     }
 });
@@ -23,4 +29,4 @@ const order = createSlice({
 // Reducer
 export default order.reducer;
 
-export const { setOrder } = order.actions;
+export const { setOrder, setURLCardPayemnt } = order.actions;

@@ -13,10 +13,14 @@ import LAYOUT_CONST from '@ecommerce-frontend/src/constant';
 
 import NavItem from '@ecommerce-frontend/src/application/journey/layouts/admin/Sidebar/components/NavItem';
 import NavGroup from '@ecommerce-frontend/src/application/journey/layouts/admin/Sidebar/components/NavGroup';
+import React from 'react';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const MenuListItems = () => {
+    const { productSelect } = useSelector((state) => state.product);
+    React.useEffect(() => {}, [productSelect]);
+
     /** init theme */
     const theme = useTheme();
     const { layout } = useConfig();

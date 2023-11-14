@@ -12,6 +12,7 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { getListProducts } from '@ecommerce-frontend/src/infras/data/store/reducers/product';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface GetAllProductService<Entity> {
@@ -32,6 +33,7 @@ export class GetAllProductServiceImpl<Entity extends ProductModel> implements Ge
 
     /** overiding execute method */
     async execute(): Promise<Either<ProductModel[], AppError>> {
+        dispatch(setLoading(true));
         const res = await this.productApi.getAll();
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -44,6 +46,7 @@ export class GetAllProductServiceImpl<Entity extends ProductModel> implements Ge
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -52,7 +55,7 @@ export class GetAllProductServiceImpl<Entity extends ProductModel> implements Ge
 
         /** save data to redux */
         dispatch(getListProducts(result));
-
+        dispatch(setLoading(false));
         return success(result as ProductModel[]);
     }
 }

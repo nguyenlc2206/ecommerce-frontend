@@ -31,5 +31,9 @@
     "product-category": "Category",
     "product-status": "Status",
     "product-images": "Images",
-    "product-actions": "Actions"
+    "product-actions": "Actions",
+    "product-quantity": "Quantity",
+
+    "account-settings": "Account Setting",
+    "logout": "Logout"
 }

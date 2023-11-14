@@ -1,34 +1,40 @@
 // import libs
 import React, { ReactNode } from 'react';
 import * as _ from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 // import material ui
 import { Grid, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
 import { Theme, styled, useTheme } from '@mui/material/styles';
 
+// import type, constant
+import { TabsProps } from '@ecommerce-frontend/src/common/types';
+import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
+
 // import projects
+import useConfig from '@ecommerce-frontend/src/common/hooks/useConfig';
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import AppBar from '@ecommerce-frontend/src/application/journey/layouts/client/Header/components/Appbar';
-import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
+import CheckoutCard from '@ecommerce-frontend/src/application/journey/client/components/checkout/Cart';
+import ProductEmpty from '@ecommerce-frontend/src/application/journey/client/components/products/ProductEmpty';
+import BillingAddress from '@ecommerce-frontend/src/application/journey/client/components/checkout/BillingAddress';
+import PaymentCheckout from '@ecommerce-frontend/src/application/journey/client/components/checkout/Payment';
 
 // assets
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CreditCardTwoToneIcon from '@mui/icons-material/CreditCardTwoTone';
-import useConfig from '@ecommerce-frontend/src/common/hooks/useConfig';
+
+// import redux
 import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
-import CheckoutCard from '@ecommerce-frontend/src/application/journey/client/components/checkout/Cart';
+
+// import service
 import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
 import { DeleteCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/deleteCart';
-import ProductEmpty from '@ecommerce-frontend/src/application/journey/client/components/products/ProductEmpty';
-import { TabsProps } from '@ecommerce-frontend/src/common/types';
-import BillingAddress from '@ecommerce-frontend/src/application/journey/client/components/checkout/BillingAddress';
-import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
-import PaymentCheckout from '../components/checkout/Payment';
 import { GetCartByAccountIdServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/getCartByAccountId';
 import { setOrderComplete } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 
-// custom stlye
+// custom style
 const HeaderWrapper = styled('div')(({ theme }) => ({
     overflowX: 'hidden',
     overflowY: 'clip',
@@ -129,6 +135,7 @@ const steps = { initial: 0, billing: 1, payment: 2 };
 // ==============================|| CHECKOUT CLIENT PAGE ||============================== //
 
 const CheckoutClientPage = () => {
+    const navigate = useNavigate();
     /** init theme */
     const theme = useTheme();
     /** init variables */
@@ -137,6 +144,7 @@ const CheckoutClientPage = () => {
 
     // init redux
     const { products, step, discounts, billingAddress } = useSelector((state) => state.cart.checkout);
+    const { urlCardPayment } = useSelector((state) => state.order);
 
     const [value, setValue] = React.useState(steps[step] || 0);
     const handleChange = (newValue: number) => {
@@ -149,6 +157,7 @@ const CheckoutClientPage = () => {
         const res = await serivceCheckout.execute();
     };
     React.useEffect(() => {
+        // dispatch(setOrderComplete({ id: '', status: false }));
         handleGetCart();
     }, []);
 
@@ -174,6 +183,7 @@ const CheckoutClientPage = () => {
         const servive = new UpdateCartServiceImpl();
         if (step === 'payment') {
             const res = await servive.execute({ status: status[step] });
+            if (res.isFailure()) return;
         } else {
             setValue(steps[status[step]]);
             const res = await servive.execute({ status: status[step], discounts: discounts });

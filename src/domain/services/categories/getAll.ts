@@ -12,6 +12,7 @@ import { CategoryApi } from '@ecommerce-frontend/src/infras/data/remote/category
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { getListCategories } from '@ecommerce-frontend/src/infras/data/store/reducers/category';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface GetAllCategoryService<Entity> {
@@ -31,6 +32,7 @@ export class GetAllCategoryServiceImpl<Entity extends CategoryModel> implements 
 
     /** overiding execute method */
     async execute(): Promise<Either<CategoryModel[], AppError>> {
+        dispatch(setLoading(true));
         const res = await this.categoryApi.getAll();
         if (res?.EC !== 200) {
             /** open snackbar alert */
@@ -43,6 +45,7 @@ export class GetAllCategoryServiceImpl<Entity extends CategoryModel> implements 
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -51,7 +54,7 @@ export class GetAllCategoryServiceImpl<Entity extends CategoryModel> implements 
 
         /** save data to redux */
         dispatch(getListCategories(result));
-
+        dispatch(setLoading(false));
         return success(result as CategoryModel[]);
     }
 }

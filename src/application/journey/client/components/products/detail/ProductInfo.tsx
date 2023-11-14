@@ -54,6 +54,7 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import { SearchProductsServiceImpl } from '@ecommerce-frontend/src/domain/services/product/search';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 // product color select
 function getColor(color: string) {
@@ -203,6 +204,7 @@ const ProductInfo = () => {
                 // init service
                 const service = new AddProductCartServiceImpl();
                 const res = await service.execute({ products: data });
+                dispatch(setLoading(false));
             }
         } else {
             dispatch(

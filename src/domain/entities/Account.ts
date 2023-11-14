@@ -23,17 +23,8 @@ export class AccountModel {
     cart?: KeyedObject;
 
     fromAccountModel?(res: AxiosResponseCustom) {
-        return {
-            id: res?.DT?.data?.id,
-            fullName: res?.DT?.data?.fullName,
-            phoneNo: res?.DT?.data?.phoneNo,
-            email: res?.DT?.data?.email,
-            role: res?.DT?.data?.role,
-            avatar: res?.DT?.data?.avatar,
-            accessToken: res?.DT?.data?.accessToken,
-            shippingAddress: res?.DT?.data?.shippingAddress,
-            cart: res?.DT?.data?.cart
-        } as AccountModel;
+        const result = { ...res?.DT?.data };
+        return result;
     }
 
     fromAccountModelGetAll?(res: AxiosResponseCustom) {

@@ -20,12 +20,6 @@ export class AccountApi<T extends AccountModel> implements AccountRepository<T> 
         return response;
     }
 
-    /** overiding updateProfile method */
-    async updateProfile(entity: T): Promise<AxiosResponseCustom> {
-        const response = await axios.post(`/api/v1/account/update/${entity?.id}`, { ...entity?.data });
-        return response;
-    }
-
     /** overiding updateMe method */
     async updateMe(entity: T): Promise<AxiosResponseCustom> {
         const formData = new FormData();
@@ -52,6 +46,29 @@ export class AccountApi<T extends AccountModel> implements AccountRepository<T> 
     /** overiding delete method */
     async delete(id: string): Promise<AxiosResponseCustom> {
         const response = await axios.delete(`/api/v1/account/${id}`);
+        return response;
+    }
+
+    /** overiding updateAccount method */
+    async updateAccount(entity: T): Promise<AxiosResponseCustom> {
+        const formData = new FormData();
+        if (!entity?.avatar) {
+            formData.append('fullName', entity?.fullName);
+            formData.append('phoneNo', entity?.phoneNo);
+            formData.append('email', entity?.email);
+        } else {
+            formData.append('fullName', entity?.fullName);
+            formData.append('phoneNo', entity?.phoneNo);
+            formData.append('email', entity?.email);
+            formData.append('avatar', entity?.avatar, entity?.avatar?.name);
+        }
+        const response = await axios.post(`/api/v1/account/update/${entity?.id}`, formData);
+        return response;
+    }
+
+    /** overiding active account */
+    async activeAccount(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/account/active/${id}`);
         return response;
     }
 }

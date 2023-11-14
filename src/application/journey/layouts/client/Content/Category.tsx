@@ -26,6 +26,10 @@ const CategoryCardSection = () => {
     /** init hooks */
     const navigate = useNavigate();
     const { categories } = useSelector((state) => state.category);
+    const [rows, setRows] = React.useState<CategoryModel[]>(
+        Object.values(categories).filter((item) => item.isDeleted !== true)
+    );
+
     /** init setting */
     const settings = {
         dots: true,
@@ -130,7 +134,7 @@ const CategoryCardSection = () => {
                     }}
                 >
                     <Slider {...settings}>
-                        {Object.values(categories).map((item, index) => (
+                        {rows.map((item, index) => (
                             <SubCard
                                 key={index}
                                 content={false}

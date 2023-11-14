@@ -5,7 +5,7 @@ export class CategoryModel {
     id?: string;
     accountId?: string;
     name?: string;
-    image?: string | ArrayBuffer;
+    image?: any;
     createdAt?: Date;
     updatedAt?: Date;
     isDeleted?: boolean;

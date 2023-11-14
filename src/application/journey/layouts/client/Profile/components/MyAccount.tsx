@@ -15,9 +15,8 @@ import Avatar from '@ecommerce-frontend/src/application/widgets/avatar/Avatar';
 import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 
 // import redux
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
-import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
-import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { LOGIN } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 
 // ==============================|| PROFILE - MY PROFILE ACCOUNT ||============================== //
 
@@ -27,6 +26,8 @@ const MyAccountProfile = () => {
 
     /** init variables */
     const { account } = useSelector((state) => state.account);
+    const { userSelect } = useSelector((state) => state.user);
+
     const { id } = useParams();
 
     /** init hooks */
@@ -35,11 +36,13 @@ const MyAccountProfile = () => {
     const [imageURL, setImageURL] = React.useState<string>('');
     const [loading, setLoading] = React.useState<boolean>(false);
 
-    const { updateMe } = useAuth();
+    const { updateMe, updateProfile } = useAuth();
 
-    const [fullName, setFullName] = React.useState<string>(account?.fullName);
-    const [email, setEmail] = React.useState<string>(account?.email);
-    const [phone, setPhone] = React.useState<string>(account?.phoneNo);
+    const [fullName, setFullName] = React.useState<string>(
+        userSelect?.fullName ? userSelect?.fullName : account?.fullName
+    );
+    const [email, setEmail] = React.useState<string>(userSelect?.email ? userSelect?.email : account?.email);
+    const [phone, setPhone] = React.useState<string>(userSelect?.phoneNo ? userSelect?.phoneNo : account?.phoneNo);
 
     /** chandle convert base64 to url */
     const base64ToBlob = (base64: string, contentType = 'image/png', chunkLength = 512) => {
@@ -71,9 +74,21 @@ const MyAccountProfile = () => {
     /** handle updateMe account */
     const handleUpdateAccount = async () => {
         setLoading(true);
-        /** prepare data update */
-        let data: AccountModel = { fullName: fullName, email: email, phoneNo: phone, avatar: image };
-        const res = await updateMe(data);
+        /** prepare data update me */
+        if (!userSelect) {
+            let data: AccountModel = { fullName: fullName, email: email, phoneNo: phone, avatar: image };
+            const res = await updateMe(data);
+        } else {
+            let data: AccountModel = {
+                id: id,
+                fullName: fullName,
+                email: email,
+                phoneNo: phone,
+                avatar: image ? image : null
+            };
+            /** call update profile */
+            const res = await updateProfile(data);
+        }
         setLoading(false);
     };
 
@@ -86,7 +101,9 @@ const MyAccountProfile = () => {
                             <Grid item xs={12}>
                                 <Avatar
                                     alt='Avatar Account'
-                                    src={imageURL ? imageURL : (account?.avatar as string)}
+                                    src={
+                                        imageURL ? imageURL : userSelect?.avatar ? userSelect?.avatar : account?.avatar
+                                    }
                                     sx={{ width: 100, height: 100, margin: '0 auto' }}
                                 />
                             </Grid>
@@ -123,7 +140,7 @@ const MyAccountProfile = () => {
                     <SubCard title='General Settings'>
                         <form noValidate autoComplete='off'>
                             <Grid container spacing={gridSpacing}>
-                                {account?.fullName && (
+                                {(userSelect?.fullName || account?.fullName) && (
                                     <Grid item xs={12} md={6}>
                                         <TextField
                                             id='outlined-basic5'
@@ -136,7 +153,7 @@ const MyAccountProfile = () => {
                                         />
                                     </Grid>
                                 )}
-                                {account?.email && (
+                                {(userSelect?.email || account?.email) && (
                                     <Grid item xs={12} md={6}>
                                         <TextField
                                             id='outlined-basic6'
@@ -149,7 +166,7 @@ const MyAccountProfile = () => {
                                         />
                                     </Grid>
                                 )}
-                                {account?.phoneNo && (
+                                {(userSelect?.phoneNo || account?.phoneNo) && (
                                     <Grid item xs={12} md={6}>
                                         <TextField
                                             id='outlined-basic7'

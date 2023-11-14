@@ -7,7 +7,7 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 
 const initialState = {
     products: [] as ProductModel[],
-    productSelect: {} as ProductModel,
+    productSelect: null,
     productSizes: [] as ProductModel[]
 };
 

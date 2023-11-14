@@ -5,6 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import { IconCategory, IconList, IconShoppingCart, IconGiftCard } from '@tabler/icons-react';
 import { NavItemType } from '@ecommerce-frontend/src/common/types';
 
+// import redux
+import { store } from '@ecommerce-frontend/src/infras/data/store/';
+
 // constant
 const icons = {
     IconCategory,
@@ -26,14 +29,15 @@ const storeNav: NavItemType = {
             title: <FormattedMessage id='category' />,
             type: 'item',
             icon: icons.IconCategory,
-            url: '/admin/category'
+            url: '/admin/categories'
         },
         {
             id: 'products',
             title: <FormattedMessage id='products' />,
             type: 'item',
             icon: icons.IconList,
-            url: '/admin/products'
+            url: '/admin/products',
+            breadcrumbs: store.getState().product.productSelect && true
         },
         {
             id: 'orders',

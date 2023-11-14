@@ -4,6 +4,7 @@ import {
     Chip,
     Divider,
     Grid,
+    IconButton,
     List,
     ListItemButton,
     ListItemIcon,
@@ -14,8 +15,10 @@ import {
     TableCell,
     TableContainer,
     TableRow,
+    Tooltip,
     Typography
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // import projects
 import Avatar from '@ecommerce-frontend/src/application/widgets/avatar/Avatar';
@@ -23,32 +26,67 @@ import SubCard from '@ecommerce-frontend/src/application/widgets/cards/SubCard';
 import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
 
 // assets
-import { IconEdit } from '@tabler/icons-react';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import PhonelinkRingTwoToneIcon from '@mui/icons-material/PhonelinkRingTwoTone';
 import PinDropTwoToneIcon from '@mui/icons-material/PinDropTwoTone';
 import MailTwoToneIcon from '@mui/icons-material/MailTwoTone';
+import BlockIcon from '@mui/icons-material/Block';
 
 // import redux
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { ActiveAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/active';
+import { DeleteAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/delete';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** names Don&apos;t look right */
-function createData(name: string, calories?: string, fat?: string, carbs?: string, protein?: string) {
+function createData(name: string, calories?: string, fat?: any, carbs?: string, protein?: string) {
     return { name, calories, fat, carbs, protein };
 }
 
 // ==============================|| PROFILE ACCOUNT USER - PROFILE ||============================== //
 
 const Profile = () => {
+    // init theme
+    const theme = useTheme();
     // init variables
     const { account } = useSelector((state) => state.account);
+    const { userSelect } = useSelector((state) => state.user);
 
     const rows = [
-        createData('Full Name', ':', account?.fullName),
-        createData('Phone', ':', account?.phoneNo),
-        createData('Email', ':', account?.email),
-        createData('Address', ':', account?.shippingAddress?.address),
-        createData('Zip Code', ':', '12345')
+        createData('Full Name', ':', userSelect?.fullName ? userSelect?.fullName : account?.fullName),
+        createData('Phone', ':', userSelect?.phoneNo ? userSelect?.phoneNo : account?.phoneNo),
+        createData('Email', ':', userSelect?.email ? userSelect?.email : account?.email),
+        createData(
+            'Address',
+            ':',
+            userSelect?.shippingAddress?.address
+                ? userSelect?.shippingAddress?.address
+                : account?.shippingAddress?.address
+        ),
+        createData(
+            'Status Account',
+            ':',
+            <Chip
+                size='medium'
+                label={userSelect?.isDeleted ? 'Block' : 'Active'}
+                color={userSelect?.isDeleted ? 'error' : 'success'}
+            />
+        )
     ];
+
+    // handle active account
+    const handleActiveAccount = async (id: string) => {
+        const service = new ActiveAccountServiceImpl();
+        const res = await service.execute(id);
+        dispatch(setLoading(false));
+    };
+
+    // hanlde block/delete account
+    const handleBlockAccount = async (id: string) => {
+        const service = new DeleteAccountServiceImpl();
+        const res = await service.execute(id);
+        dispatch(setLoading(false));
+    };
 
     return (
         <>
@@ -58,18 +96,25 @@ const Profile = () => {
                         title={
                             <Grid container spacing={2} alignItems='center'>
                                 <Grid item>
-                                    <Avatar alt='User 1' src={account?.avatar as string} />
+                                    <Avatar
+                                        alt='User 1'
+                                        src={userSelect?.avatar ? userSelect?.avatar : account?.avatar}
+                                    />
                                 </Grid>
                                 <Grid item xs zeroMinWidth>
                                     <Typography align='left' variant='subtitle1'>
-                                        {'nguyencaole'}
+                                        {userSelect?.fullName ? userSelect?.fullName : account?.fullName}
                                     </Typography>
                                     <Typography align='left' variant='subtitle2'>
                                         Account Customer
                                     </Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Chip size='small' label={account?.role} color='primary' />
+                                    <Chip
+                                        size='small'
+                                        label={userSelect?.role ? userSelect?.role : account?.role}
+                                        color='primary'
+                                    />
                                 </Grid>
                             </Grid>
                         }
@@ -82,7 +127,7 @@ const Profile = () => {
                                 <ListItemText primary={<Typography variant='subtitle1'>Email</Typography>} />
                                 <ListItemSecondaryAction>
                                     <Typography variant='subtitle2' align='right'>
-                                        {account?.email}
+                                        {userSelect?.email ? userSelect?.email : account?.email}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItemButton>
@@ -94,7 +139,7 @@ const Profile = () => {
                                 <ListItemText primary={<Typography variant='subtitle1'>Phone</Typography>} />
                                 <ListItemSecondaryAction>
                                     <Typography variant='subtitle2' align='right'>
-                                        {account?.phoneNo}
+                                        {userSelect?.phoneNo ? userSelect?.phoneNo : account?.phoneNo}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItemButton>
@@ -119,9 +164,37 @@ const Profile = () => {
                             <SubCard
                                 title='About me'
                                 secondary={
-                                    <Button>
-                                        <IconEdit stroke={1.5} size='20px' aria-label='Edit Details' />
-                                    </Button>
+                                    !userSelect?.isDeleted ? (
+                                        <Tooltip placement='top' title='Block Account'>
+                                            <IconButton
+                                                color='primary'
+                                                sx={{
+                                                    color: theme.palette.orange.dark,
+                                                    borderColor: theme.palette.orange.main,
+                                                    '&:hover ': { background: theme.palette.orange.light }
+                                                }}
+                                                size='large'
+                                                onClick={() => handleBlockAccount(userSelect?.id)}
+                                            >
+                                                <BlockIcon sx={{ fontSize: '1.1rem' }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                    ) : (
+                                        <Tooltip placement='top' title='Active Account'>
+                                            <IconButton
+                                                color='primary'
+                                                sx={{
+                                                    color: theme.palette.success.dark,
+                                                    borderColor: theme.palette.success.main,
+                                                    '&:hover ': { background: theme.palette.success.light }
+                                                }}
+                                                size='large'
+                                                onClick={() => handleActiveAccount(userSelect?.id)}
+                                            >
+                                                <BorderColorIcon sx={{ fontSize: '1.1rem' }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )
                                 }
                             >
                                 <Grid container spacing={2}>

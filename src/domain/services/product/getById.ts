@@ -11,6 +11,8 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 // import redux
 import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { activeProduct } from '@ecommerce-frontend/src/infras/data/store/reducers/product';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
+import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 
 /** define getAll services */
 export interface GetProductByIdService<Entity> {
@@ -30,13 +32,27 @@ export class GetProductByIdServiceImpl<Entity extends ProductModel> implements G
 
     /** overiding execute method */
     async execute(id: string): Promise<Either<ProductModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.productApi.getById(id);
-        if (res?.EC !== 200) return failure(new AppError(res?.EM, res?.EC));
+        if (res?.EC !== 200) {
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: res?.EM,
+                    variant: 'alert',
+                    alert: { color: 'error' },
+                    close: false
+                })
+            );
+            dispatch(setLoading(false));
+            return failure(new AppError(res?.EM, res?.EC));
+        }
 
         const _init = new ProductModel();
         const result = _init.fromProductModel(res);
         /** save data to redux */
         dispatch(activeProduct(result));
+        dispatch(setLoading(false));
 
         return success(result as ProductModel);
     }

@@ -48,6 +48,20 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
         const _init = new AccountModel();
         const result = _init.fromAccountModel(res);
 
+        // check account block
+        if (result?.isDeleted || !result) {
+            dispatch({ type: LOGOUT });
+            dispatch(
+                openSnackbar({
+                    open: true,
+                    message: 'Account is block. Please contact admin to unlock account!',
+                    variant: 'alert',
+                    alert: { color: 'error' },
+                    close: false
+                })
+            );
+            return failure(new AppError('Account is block. Please contact admin to unlock account!', 400));
+        }
         // check product cart with account Id
         dispatch(addProduct(result?.cart?.products));
         dispatch(setStep(result?.cart?.status));

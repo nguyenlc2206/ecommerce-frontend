@@ -27,15 +27,16 @@ import { FormattedMessage } from 'react-intl';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // assets
+import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import useConfig from '@ecommerce-frontend/src/common/hooks/useConfig';
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+import { IconLogout, IconSettings } from '@tabler/icons-react';
 import Transitions from '@ecommerce-frontend/src/application/journey/layouts/admin/Sidebar/components/Transitions';
 
 import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
 
 // import redux
-import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
-import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -68,8 +69,8 @@ const ProfileSection = () => {
     // * handle handleListItemClick
     const handleListItemClick = (event: React.MouseEvent<HTMLDivElement>, index: number, route: string = '') => {
         handleClose(event);
-
         if (route && route !== '') {
+            dispatch(activeUser(null));
             navigate(route);
         }
     };
@@ -213,8 +214,7 @@ const ProfileSection = () => {
                                                         <ListItemText
                                                             primary={
                                                                 <Typography variant='body2'>
-                                                                    {/* <FormattedMessage id='account-settings' /> */}
-                                                                    Account-setting
+                                                                    <FormattedMessage id='account-settings' />
                                                                 </Typography>
                                                             }
                                                         />
@@ -230,8 +230,7 @@ const ProfileSection = () => {
                                                         <ListItemText
                                                             primary={
                                                                 <Typography variant='body2'>
-                                                                    {/* <FormattedMessage id='logout' /> */}
-                                                                    Logout
+                                                                    <FormattedMessage id='logout' />
                                                                 </Typography>
                                                             }
                                                         />

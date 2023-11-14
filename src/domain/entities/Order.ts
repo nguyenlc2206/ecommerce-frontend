@@ -16,6 +16,7 @@ export class OrderModel {
     isDeleted?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
+    url?: string;
 
     fromOrderModel?(res: AxiosResponseCustom) {
         const result = { ...res?.DT?.data };

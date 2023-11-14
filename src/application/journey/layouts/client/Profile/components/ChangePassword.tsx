@@ -1,5 +1,6 @@
 // import libs
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -9,18 +10,20 @@ import { Alert, AlertTitle, Button, Grid, TextField } from '@mui/material';
 import SubCard from '@ecommerce-frontend/src/application/widgets/cards/SubCard';
 import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
 import AnimateButton from '@ecommerce-frontend/src/application/widgets/buttons/AnimateButton';
-import { ChangePasswordServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/changePassword';
-import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 
 // import redux
-import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
+import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
 
 // ==============================|| PROFILE - CHANGE PASSWORD ||============================== //
 
 const ChangePasswordProfile = () => {
     /** init theme */
+    const navigate = useNavigate();
     const theme = useTheme();
+    const { changePassword, changePasswordAdmin } = useAuth();
+    const { userSelect } = useSelector((state) => state.user);
 
     /** init hooks */
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
@@ -57,26 +60,15 @@ const ChangePasswordProfile = () => {
         setIsSubmitting(true);
         // valition
         validationFields();
-        // init service
-        const service = new ChangePasswordServiceImpl();
-        // data update password
-        const data = {
-            passwordCurrent: currentPassword,
-            password: newPassword,
-            passwordConfirm: confirmPassword
-        } as AccountModel;
+
         // execute service
-        const res = await service.execute(data);
-        if (res.isFailure()) {
-            dispatch(
-                openSnackbar({
-                    open: true,
-                    message: res.error.message,
-                    variant: 'alert',
-                    alert: { color: 'error' },
-                    close: false
-                })
-            );
+        if (!userSelect) {
+            const res = await changePassword(currentPassword, newPassword, confirmPassword);
+            if (res.isFailure()) return;
+            navigate('/login');
+        } else {
+            const res = await changePasswordAdmin(userSelect?.id, currentPassword, newPassword, confirmPassword);
+            if (res.isFailure()) return;
         }
         handleClearFields();
         setIsSubmitting(false);

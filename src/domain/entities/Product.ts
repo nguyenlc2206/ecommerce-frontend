@@ -8,13 +8,13 @@ export class ProductModel {
     name?: string;
     description?: string;
     categoryId?: string;
-    sizes?: Array<string>;
+    sizes?: any;
     image?: string;
+    images?: any;
     discount?: number;
     qty?: number;
     colors?: Array<string>;
     color?: string;
-    images?: Array<string>;
     isDeleted?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
