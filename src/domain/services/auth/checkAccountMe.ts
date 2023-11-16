@@ -11,6 +11,8 @@ import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { LOGOUT } from '@ecommerce-frontend/src/infras/data/store/actions/account';
 import { addProduct, setStep } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
+import { setDisplayType } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
 
 /** define auth services */
 export interface CheckAccountMeService<Entity> {
@@ -28,6 +30,7 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
 
     /** overiding execute method */
     async execute(): Promise<Either<AccountModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.authApi.checkAccountMe();
         if (res?.EC === 402 || res?.EC === 401) {
             /** open snackbar alert */
@@ -42,11 +45,15 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
             );
             /** save data to redux */
             dispatch({ type: LOGOUT });
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
         const _init = new AccountModel();
         const result = _init.fromAccountModel(res);
+
+        // // check role admin
+        // if (result?.role === 'admin') dispatch(setDisplayType('orderAdmin'));
 
         // check account block
         if (result?.isDeleted || !result) {
@@ -60,12 +67,13 @@ export class CheckAccountMeServiceImpl<Entity extends AccountModel> implements C
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError('Account is block. Please contact admin to unlock account!', 400));
         }
         // check product cart with account Id
         dispatch(addProduct(result?.cart?.products));
         dispatch(setStep(result?.cart?.status));
-
+        dispatch(setLoading(false));
         return success(result);
     }
 }

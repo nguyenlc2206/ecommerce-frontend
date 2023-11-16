@@ -29,7 +29,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // assets
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import useConfig from '@ecommerce-frontend/src/common/hooks/useConfig';
-import { IconLogout, IconSettings } from '@tabler/icons-react';
+import { IconLogout, IconSettings, IconShoppingCart } from '@tabler/icons-react';
 import Transitions from '@ecommerce-frontend/src/application/journey/layouts/admin/Sidebar/components/Transitions';
 
 import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
@@ -37,6 +37,7 @@ import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
 // import redux
 import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
+import { setDisplayType } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -215,6 +216,25 @@ const ProfileSection = () => {
                                                             primary={
                                                                 <Typography variant='body2'>
                                                                     <FormattedMessage id='account-settings' />
+                                                                </Typography>
+                                                            }
+                                                        />
+                                                    </ListItemButton>
+
+                                                    <ListItemButton
+                                                        sx={{ borderRadius: `${borderRadius}px` }}
+                                                        onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                                                            handleListItemClick(event, 0, `/orders`);
+                                                            dispatch(setDisplayType('orderMe'));
+                                                        }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <IconShoppingCart stroke={1.5} size='1.3rem' />
+                                                        </ListItemIcon>
+                                                        <ListItemText
+                                                            primary={
+                                                                <Typography variant='body2'>
+                                                                    <FormattedMessage id='orders' />
                                                                 </Typography>
                                                             }
                                                         />

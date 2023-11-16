@@ -16,6 +16,7 @@ import { setDiscount } from '@ecommerce-frontend/src/infras/data/store/reducers/
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { store } from '@ecommerce-frontend/src/infras/data/store';
 import { ProductApi } from '@ecommerce-frontend/src/infras/data/remote/product.Api';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface GetCouponByCodeService<Entity> {
@@ -37,6 +38,7 @@ export class GetCouponByCodeServiceImpl<Entity extends CouponModel> implements G
 
     /** overiding execute method */
     async execute(code: string): Promise<Either<CouponModel, AppError>> {
+        dispatch(setLoading(true));
         const res = await this.couponApi.getByCode(code);
         if (res?.EC !== 200) {
             dispatch(
@@ -48,6 +50,7 @@ export class GetCouponByCodeServiceImpl<Entity extends CouponModel> implements G
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -60,6 +63,7 @@ export class GetCouponByCodeServiceImpl<Entity extends CouponModel> implements G
             status: store.getState().cart.checkout.step,
             discounts: [{ code: result?.code, value: result?.discount }]
         });
+        dispatch(setLoading(false));
         return success(result as CouponModel);
     }
 }

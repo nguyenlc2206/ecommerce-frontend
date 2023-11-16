@@ -174,7 +174,9 @@ const Profile = () => {
                                                     '&:hover ': { background: theme.palette.orange.light }
                                                 }}
                                                 size='large'
-                                                onClick={() => handleBlockAccount(userSelect?.id)}
+                                                onClick={() =>
+                                                    handleBlockAccount(userSelect?.id ? userSelect?.id : account?.id)
+                                                }
                                             >
                                                 <BlockIcon sx={{ fontSize: '1.1rem' }} />
                                             </IconButton>

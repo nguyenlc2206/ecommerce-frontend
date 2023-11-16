@@ -18,6 +18,7 @@ import {
 } from '@ecommerce-frontend/src/domain/services/product/getById';
 import { setMaxValues } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 import { store } from '@ecommerce-frontend/src/infras/data/store';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 /** define getAll services */
 export interface SearchProductsService<Entity> {
@@ -38,6 +39,7 @@ export class SearchProductsServiceImpl<Entity extends ProductModel> implements S
 
     /** overiding execute method */
     async execute(entity: Entity): Promise<Either<ProductModel, AppError>> {
+        dispatch(setLoading(true));
         const params = this.handleProcessingParams(entity);
         const res = await this.productApi.query(params);
         if (res?.EC !== 200) {
@@ -51,6 +53,7 @@ export class SearchProductsServiceImpl<Entity extends ProductModel> implements S
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -68,7 +71,7 @@ export class SearchProductsServiceImpl<Entity extends ProductModel> implements S
                     close: false
                 })
             );
-            const res = await this.getProductById.execute(result[0]?.id);
+            const res = await this.getProductById.execute(entity?.id);
             return res;
         }
         // active product select
@@ -79,6 +82,7 @@ export class SearchProductsServiceImpl<Entity extends ProductModel> implements S
                 [`${result[0]?.products[0]?.id}`]: result[0]?.products[0]?.totalQty
             })
         );
+        dispatch(setLoading(false));
         return success(result);
     }
 

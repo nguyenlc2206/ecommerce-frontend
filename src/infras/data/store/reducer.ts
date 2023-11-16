@@ -13,6 +13,7 @@ import productReducer from '@ecommerce-frontend/src/infras/data/store/reducers/p
 import cartReducer from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 import pageReducer from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 import orderReducer from '@ecommerce-frontend/src/infras/data/store/reducers/order';
+import couponReducer from '@ecommerce-frontend/src/infras/data/store/reducers/coupon';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -53,7 +54,8 @@ const reducer = combineReducers({
     ),
     product: productReducer,
     page: pageReducer,
-    order: orderReducer
+    order: orderReducer,
+    coupon: couponReducer
 });
 
 export default reducer;

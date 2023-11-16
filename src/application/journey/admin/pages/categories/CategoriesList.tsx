@@ -1,24 +1,17 @@
 // * import libs
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
     Avatar,
-    Card,
     CardContent,
     Chip,
     Fab,
     Grid,
     IconButton,
     InputAdornment,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Skeleton,
     Stack,
     Table,
     TableBody,
@@ -63,15 +56,14 @@ const CategoriesList = () => {
     /** init theme */
     const theme = useTheme();
     const { pageLoading } = useSelector((state) => state.page);
+    const { categories, categorySelect } = useSelector((state) => state.category);
 
-    const { categories } = useSelector((state) => state.category);
     const [rows, setRows] = React.useState<CategoryModel[]>(Object.values(categories));
     React.useEffect(() => {
         setRows(Object.values(categories));
     }, [pageLoading]);
 
     /** init hooks */
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // init variables
@@ -301,7 +293,7 @@ const CategoriesList = () => {
             </MainCard>
 
             <Grid container justifyContent='center'>
-                <FormUpdateCategoryDialog open={open} setOpen={setOpen} />
+                <FormUpdateCategoryDialog category={categorySelect} open={open} setOpen={setOpen} />
             </Grid>
         </>
     );

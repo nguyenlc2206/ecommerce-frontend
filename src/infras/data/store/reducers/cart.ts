@@ -15,7 +15,8 @@ const initialState = {
         billingAddress: null,
         orderComplete: {
             id: '',
-            status: false
+            status: false,
+            orderNumber: ''
         },
         paymentCharged: {
             type: 'free',
@@ -55,8 +56,8 @@ const cart = createSlice({
         setPayment(state, action) {
             state.checkout.paymentCharged = {
                 ...state.checkout.paymentCharged,
-                type: action.payload.type,
-                method: action.payload.method
+                type: action.payload.type ? action.payload.type : state.checkout.paymentCharged.type,
+                method: action.payload.method ? action.payload.method : state.checkout.paymentCharged.method
             };
         },
         // set order complete

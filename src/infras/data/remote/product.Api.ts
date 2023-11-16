@@ -104,4 +104,10 @@ export class ProductApi<T extends ProductModel> implements ProductRepository<T> 
         const response = await axios.post(`/api/v1/product/size`, { ...entity });
         return response;
     }
+
+    /** overding sort product */
+    async sort(): Promise<AxiosResponseCustom> {
+        const response = await axios.get('/api/v1/product/sort');
+        return response;
+    }
 }

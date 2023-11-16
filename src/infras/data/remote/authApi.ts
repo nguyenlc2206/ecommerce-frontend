@@ -60,4 +60,10 @@ export class AuthApi<T extends AccountModel> implements AuthRepository<T> {
         const response = await axios.patch(`/api/v1/change-password/admin/${entity?.id}`, { ...entity.data });
         return response;
     }
+
+    /** overiding emailSupport method */
+    async emailSupport(entity: T): Promise<AxiosResponseCustom> {
+        const response = await axios.post('/api/v1/email-support', { ...entity });
+        return response;
+    }
 }

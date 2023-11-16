@@ -5,9 +5,9 @@ import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 export class CouponModel {
     id?: string;
     code?: string;
-    startDate?: Date;
-    endDate?: Date;
-    discount?: Number;
+    startDate?: any;
+    endDate?: any;
+    discount?: number;
     type?: string;
     accountId?: string;
     isDeleted?: boolean;

@@ -19,6 +19,11 @@ const ProductCategoryPage = Loadable(
 const ContactPage = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/client/pages/Contact')));
 const CheckoutPage = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/client/pages/Checkout')));
 
+const OrdersPage = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/client/pages/Orders')));
+const OrderDetailPage = Loadable(
+    lazy(() => import('@ecommerce-frontend/src/application/journey/client/components/orders/OrderDetail'))
+);
+
 // ==============================|| CLIENT ROUTING ||============================== //
 
 const ClientRoutes = {
@@ -36,7 +41,9 @@ const ClientRoutes = {
         { path: 'products/:id', element: <ProductDetailPage /> },
         { path: 'products/category/:id', element: <ProductCategoryPage /> },
         { path: 'profile/:id', element: <ProfilePage /> },
-        { path: 'checkout', element: <CheckoutPage /> }
+        { path: 'checkout', element: <CheckoutPage /> },
+        { path: 'orders', element: <OrdersPage /> },
+        { path: 'orders/:id', element: <OrderDetailPage /> }
     ]
 };
 

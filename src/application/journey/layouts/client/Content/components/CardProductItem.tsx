@@ -1,15 +1,21 @@
 // import libs
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import * as _ from 'lodash';
 
 // import material ui
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import { ProductCardProps } from '@ecommerce-frontend/src/common/types/cart';
 import { Button, CardContent, CardMedia, Grid, LinearProgress, Rating, Stack, Typography, styled } from '@mui/material';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
+import { AddProductCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/addCart';
 
 // assets
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
+import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
+import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
+import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 
 // ==============================|| CARD PRODUCT ITEM ||============================== //
 
@@ -22,7 +28,49 @@ const BorderLinearProgress = styled(LinearProgress)(() => ({
     }
 }));
 
-const ProductCardItem = ({ id, color, name, image, description, offerPrice, salePrice, soldOut }: ProductCardProps) => {
+const ProductCardItem = ({
+    item,
+    totalProduct,
+    name,
+    image,
+    description,
+    offerPrice,
+    salePrice,
+    soldOut
+}: ProductCardProps) => {
+    // init
+    const navigate = useNavigate();
+
+    // handle add to cart product
+    const { products } = useSelector((state) => state.cart.checkout);
+    const handleAddProduct = async (item: ProductModel) => {
+        const productFinded = _.find(products, { id: item?.id });
+        if (productFinded) {
+            const data = _.cloneDeep(products);
+            _.set(_.find(data, { id: item?.id }), 'qty', productFinded?.qty + 1);
+            const serivce = new UpdateCartServiceImpl();
+            const res = await serivce.execute({ products: data, status: 'initial' });
+        } else {
+            // processing data
+            const data = {
+                productId: item?.product?.id,
+                id: item?.id,
+                name: item?.product?.name,
+                size: item?.size,
+                color: item?.color,
+                qty: 1,
+                totalQty: item?.totalQty,
+                discount: item?.discount,
+                price: item?.price,
+                image: item?.product?.images[0]
+            };
+            // init service
+            const service = new AddProductCartServiceImpl();
+            const res = await service.execute({ products: data });
+        }
+        dispatch(setLoading(false));
+    };
+
     return (
         <>
             <MainCard
@@ -35,7 +83,13 @@ const ProductCardItem = ({ id, color, name, image, description, offerPrice, sale
                     }
                 }}
             >
-                <CardMedia sx={{ height: 160 }} image={image} title='Contemplative Reptile' component={Link} to={``} />
+                <CardMedia
+                    sx={{ height: 160 }}
+                    image={image}
+                    title='Contemplative Reptile'
+                    component={Link}
+                    to={`/products/${item?.product?.id}`}
+                />
                 <CardContent sx={{ p: 2 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -62,7 +116,7 @@ const ProductCardItem = ({ id, color, name, image, description, offerPrice, sale
                                     <BorderLinearProgress
                                         variant='determinate'
                                         color='secondary'
-                                        value={50}
+                                        value={(soldOut / totalProduct) * 100}
                                         aria-label='secondary color progress'
                                     />
                                 </Grid>
@@ -91,7 +145,7 @@ const ProductCardItem = ({ id, color, name, image, description, offerPrice, sale
                                 <Button
                                     variant='contained'
                                     sx={{ minWidth: 0 }}
-                                    onClick={() => {}}
+                                    onClick={() => handleAddProduct(item)}
                                     aria-label='product add to cart'
                                 >
                                     <ShoppingCartTwoToneIcon fontSize='small' />

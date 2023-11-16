@@ -13,7 +13,7 @@ import { dispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { openSnackbar } from '@ecommerce-frontend/src/infras/data/store/reducers/snackbar';
 import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 import { setOrderComplete } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
-import { setOrder, setURLCardPayemnt } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
+import { activeOrder, setURLCardPayemnt } from '@ecommerce-frontend/src/infras/data/store/reducers/order';
 
 /** define auth services */
 export interface CreateOrderService<Entity> {
@@ -48,7 +48,7 @@ export class CreateOrderServiceImpl<Entity extends OrderModel> implements Create
                 })
             );
             dispatch(setLoading(false));
-            dispatch(setOrderComplete({ id: '', status: false }));
+            dispatch(setOrderComplete({ id: '', orderNumber: '', status: false }));
             return failure(new AppError(res?.EM, res?.EC));
         }
         // process response data
@@ -66,9 +66,9 @@ export class CreateOrderServiceImpl<Entity extends OrderModel> implements Create
             })
         );
         dispatch(setLoading(false));
-        dispatch(setOrder(result));
+        dispatch(activeOrder(result));
         dispatch(setURLCardPayemnt(result?.url));
-        dispatch(setOrderComplete({ id: result?.orderNumber, status: true }));
+        dispatch(setOrderComplete({ id: result?.id, orderNumber: result?.orderNumber, status: true }));
         return success(result);
     }
 }

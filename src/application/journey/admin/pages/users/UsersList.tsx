@@ -6,15 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {
     Avatar,
-    Card,
     Chip,
     Grid,
     IconButton,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Skeleton,
     Stack,
     Table,
     TableBody,
@@ -26,7 +20,6 @@ import {
     Tooltip,
     Typography,
     InputAdornment,
-    OutlinedInput,
     Fab,
     TextField,
     CardContent
@@ -38,6 +31,8 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import { IconSearch } from '@tabler/icons-react';
+import AddIcon from '@mui/icons-material/AddTwoTone';
 
 // import redux
 import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
@@ -45,12 +40,7 @@ import { AccountModel } from '@ecommerce-frontend/src/domain/entities/Account';
 import { useDispatch } from '@ecommerce-frontend/src/infras/data/store';
 import { activeUser } from '@ecommerce-frontend/src/infras/data/store/reducers/user';
 import useAuth from '@ecommerce-frontend/src/common/hooks/useAuth';
-
 import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
-
-// assets
-import { IconSearch } from '@tabler/icons-react';
-import AddIcon from '@mui/icons-material/AddTwoTone';
 
 // init service
 import { GetAllAccountServiceImpl } from '@ecommerce-frontend/src/domain/services/account/getAll';
@@ -59,17 +49,7 @@ import { ActiveAccountServiceImpl } from '@ecommerce-frontend/src/domain/service
 import MainCard from '@ecommerce-frontend/src/application/widgets/cards/MainCard';
 import { KeyedObject } from '@ecommerce-frontend/src/common/types';
 
-// ==============================|| USER LIST ||============================== //
-
-function stableSort(array: AccountModel[], comparator: (a: AccountModel, b: AccountModel) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0] as AccountModel, b[0] as AccountModel);
-        if (order !== 0) return order;
-        return (a[1] as number) - (b[1] as number);
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
+// ==============================|| USERS LIST ||============================== //
 
 const UserList = () => {
     /** init fetch list users */

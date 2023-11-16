@@ -19,4 +19,22 @@ export class OrderApi<T extends OrderModel> implements OrderRepository<T> {
         const response = await axios.post('/api/v1/order', { ...entity });
         return response;
     }
+
+    /** overiding getAll method */
+    async getAll(): Promise<AxiosResponseCustom> {
+        const response = await axios.get('/api/v1/order/getAll');
+        return response;
+    }
+
+    /** overiding getById method */
+    async getById(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/order/${id}`);
+        return response;
+    }
+
+    /** overiding getOrderMe method */
+    async getOrderMe(): Promise<AxiosResponseCustom> {
+        const response = await axios.get('/api/v1/order-me');
+        return response;
+    }
 }

@@ -34,6 +34,23 @@
     "product-actions": "Actions",
     "product-quantity": "Quantity",
 
+    "order-number": "ID",
+    "order-customer-name": "Customer Name",
+    "order-payment-type": "Payment Type",
+    "order-payment-status": "Payment Status",
+    "order-address": "Shipping Address",
+    "order-price": "Price",
+    "order-status": "Status",
+    "order-actions": "Actions",
+
+    "coupon-code": "Code",
+    "coupon-start-date": "Start Date",
+    "coupon-end-date": "End Date",
+    "coupon-status": "Status",
+    "coupon-discount": "Discount",
+    "coupon-type": "Type Coupon",
+    "coupon-actions": "Actions",
+
     "account-settings": "Account Setting",
     "logout": "Logout"
 }

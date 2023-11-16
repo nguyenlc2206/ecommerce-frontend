@@ -58,7 +58,7 @@ interface PaymentProps {
 
 const PaymentCheckout = ({ onBack, onNext }: PaymentProps) => {
     // init redux
-    const { paymentCharged, products, orderComplete } = useSelector((state) => state.cart.checkout);
+    const { paymentCharged, products, orderComplete, discounts } = useSelector((state) => state.cart.checkout);
     const { checkout } = useSelector((state) => state.cart);
 
     // handle payment method
@@ -77,6 +77,14 @@ const PaymentCheckout = ({ onBack, onNext }: PaymentProps) => {
 
     // handle complete order
     const completeOrder = async () => {
+        // processing total price
+        let total: number = 0;
+        let coupon: number = 0;
+        let discount = discounts.length ? discounts[0]?.value : 0;
+        products.map((item: ProductModel) => {
+            total = total + (item.price - item.price * (item.discount / 100)) * item.qty;
+            coupon = coupon + item.price * (discount / 100) * item.qty;
+        });
         // process data order
         const _oderItems = [];
         checkout.products.map((item: ProductModel) => {
@@ -88,7 +96,9 @@ const PaymentCheckout = ({ onBack, onNext }: PaymentProps) => {
             orderItems: _oderItems,
             shippingAddress: checkout?.billingAddress,
             codes: checkout?.discounts[0]?.code || '',
-            paymentCharged: checkout.paymentCharged
+            paymentCharged: checkout.paymentCharged,
+            totalPrice: total - coupon,
+            discounts: discounts
         } as OrderModel;
         // init service order
         const service = new CreateOrderServiceImpl();

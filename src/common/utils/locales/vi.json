@@ -34,6 +34,23 @@
     "product-actions": "Thao tác",
     "product-quantity": "Số lượng",
 
+    "order-number": "Mã đơn hàng",
+    "order-customer-name": "Tên khách hàng",
+    "order-payment-type": "Hình thức thanh toán",
+    "order-payment-status": "Trạng thái thanh toán",
+    "order-address": "Địa chỉ giao hàng",
+    "order-price": "Giá tiền",
+    "order-status": "Trạng thái đơn hàng",
+    "order-actions": "Thao tác",
+
+    "coupon-code": "Mã giảm giá",
+    "coupon-start-date": "Ngày bắt đầu",
+    "coupon-end-date": "Ngày hết hạn",
+    "coupon-status": "Trạng thái",
+    "coupon-discount": "Phần trăm",
+    "coupon-type": "Loại mã",
+    "coupon-actions": "Thao tác",
+
     "account-settings": "Account Setting",
     "logout": "Logout"
 }

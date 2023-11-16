@@ -1,4 +1,5 @@
 import { KeyedObject } from '@ecommerce-frontend/src/common/types';
+import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 
 export interface CartStateProps {
     checkout: CartCheckoutStateProps;
@@ -49,12 +50,13 @@ export interface CartPaymentStateProps {
 }
 
 export interface ProductCardProps extends KeyedObject {
-    id?: string | number;
+    item?: ProductModel;
     color?: string;
     name: string;
     image: string;
     description?: string;
-    offerPrice?: number;
-    salePrice?: number;
-    rating?: number;
+    offerPrice?: any;
+    salePrice?: any;
+    rating?: any;
+    totalProduct?: any;
 }

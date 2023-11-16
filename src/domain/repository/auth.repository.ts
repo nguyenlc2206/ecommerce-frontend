@@ -10,4 +10,5 @@ export interface AuthRepository<T> {
     forgotPassword(entity: T): Promise<AxiosResponseCustom>;
     verifyOTP(entity: T): Promise<AxiosResponseCustom>;
     logout(): Promise<AxiosResponseCustom>;
+    emailSupport(entity: T): Promise<AxiosResponseCustom>;
 }

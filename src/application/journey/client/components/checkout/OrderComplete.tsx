@@ -74,7 +74,7 @@ const OrderComplete = ({ open }: { open: boolean }) => {
                                     <Typography variant='body1' align='center'>
                                         Your order id:{' '}
                                         <Typography variant='subtitle1' component='span' color='primary'>
-                                            {orderComplete?.id}
+                                            {orderComplete?.orderNumber}
                                         </Typography>
                                     </Typography>
                                 </Stack>
@@ -110,7 +110,7 @@ const OrderComplete = ({ open }: { open: boolean }) => {
                                             startIcon={<KeyboardBackspaceIcon />}
                                             onClick={() => {
                                                 naviage('/products');
-                                                dispatch(setOrderComplete({ status: false }));
+                                                dispatch(setOrderComplete({ status: false, id: '', orderNumber: '' }));
                                             }}
                                         >
                                             Continue Shopping
@@ -121,7 +121,7 @@ const OrderComplete = ({ open }: { open: boolean }) => {
                                             variant='contained'
                                             fullWidth
                                             onClick={() => {
-                                                naviage('/products');
+                                                naviage(`/orders/${orderComplete?.id}`);
                                                 dispatch(setOrderComplete({ status: false }));
                                             }}
                                         >

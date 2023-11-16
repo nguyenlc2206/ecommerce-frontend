@@ -69,7 +69,7 @@ const App: FC = () => {
     React.useEffect(() => {
         InjectionInit();
         handleInitialApp();
-    }, [pageLoading]);
+    }, []);
 
     if (loading) return <Loader />;
 

@@ -18,4 +18,22 @@ export class CouponApi<T extends CouponModel> implements CouponRepository<T> {
         const response = await axios.post('/api/v1/discount', { codes: code });
         return response;
     }
+
+    /** overiding getAll method */
+    async getAll(): Promise<AxiosResponseCustom> {
+        const response = await axios.get('/api/v1/coupon/getAll');
+        return response;
+    }
+
+    /** overiding delete method */
+    async delete(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.delete(`/api/v1/coupon/${id}`);
+        return response;
+    }
+
+    /** overiding active coupon */
+    async active(id: string): Promise<AxiosResponseCustom> {
+        const response = await axios.get(`/api/v1/coupon/active/${id}`);
+        return response;
+    }
 }

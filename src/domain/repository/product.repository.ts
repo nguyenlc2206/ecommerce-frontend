@@ -17,4 +17,5 @@ export interface ProductRepository<T> {
     deleteProduct(id: string): Promise<AxiosResponseCustom>;
     activeProduct(id: string): Promise<AxiosResponseCustom>;
     createSizeProduct(entity: T): Promise<AxiosResponseCustom>;
+    sort(): Promise<AxiosResponseCustom>;
 }

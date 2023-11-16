@@ -189,9 +189,7 @@ const CheckoutCard = ({ onNext, removeProduct, updateQuantity }: CartProps) => {
                                                 <Stack>
                                                     {item.price * (item.discount / 100) && (
                                                         <Typography variant='subtitle1'>
-                                                            {(item.price - item.price * (item.discount / 100)) *
-                                                                item?.qty}
-                                                            $
+                                                            {item.price - item.price * (item.discount / 100)}$
                                                         </Typography>
                                                     )}
                                                     {item.price && (

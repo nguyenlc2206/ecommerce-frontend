@@ -21,6 +21,7 @@ export class AccountModel {
     data?: AccountModel;
     shippingAddress?: KeyedObject;
     cart?: KeyedObject;
+    supportText?: string;
 
     fromAccountModel?(res: AxiosResponseCustom) {
         const result = { ...res?.DT?.data };

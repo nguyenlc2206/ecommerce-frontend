@@ -8,7 +8,8 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 const initialState = {
     products: [] as ProductModel[],
     productSelect: null,
-    productSizes: [] as ProductModel[]
+    productSizes: [] as ProductModel[],
+    productSort: [] as ProductModel[]
 };
 
 const product = createSlice({
@@ -19,11 +20,12 @@ const product = createSlice({
         getListProducts(state, action) {
             state.products = action.payload;
         },
-
         getListProductSizes(state, action) {
             state.productSizes = action.payload;
         },
-
+        getListProductSort(state, action) {
+            state.productSort = action.payload;
+        },
         // SELECT PRODUCT
         activeProduct(state, action) {
             state.productSelect = action.payload;
@@ -34,4 +36,4 @@ const product = createSlice({
 // Reducer
 export default product.reducer;
 
-export const { getListProducts, activeProduct, getListProductSizes } = product.actions;
+export const { getListProducts, activeProduct, getListProductSizes, getListProductSort } = product.actions;

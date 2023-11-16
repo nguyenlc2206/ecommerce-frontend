@@ -1,4 +1,5 @@
 // import libs
+import React from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -10,7 +11,6 @@ import {
     FormControl,
     Grid,
     InputLabel,
-    MenuItem,
     OutlinedInput,
     TextField,
     Typography
@@ -21,6 +21,7 @@ import { styled } from '@mui/material/styles';
 import AppBar from '@ecommerce-frontend/src/application/journey/layouts/client/Header/components/Appbar';
 import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
 import AnimateButton from '@ecommerce-frontend/src/application/widgets/buttons/AnimateButton';
+import { EmailSupportServiceImpl } from '@ecommerce-frontend/src/domain/services/auth/emailSupport';
 
 // style
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -41,6 +42,10 @@ const HeaderWrapper = styled('div')(({ theme }) => ({
 const ContactClientPage = () => {
     /** init theme */
     const theme = useTheme();
+    // init hooks
+    const [name, setName] = React.useState<string>('');
+    const [email, setEmail] = React.useState<string>('');
+    const [supportText, setSupportText] = React.useState<string>('');
 
     return (
         <>
@@ -106,7 +111,13 @@ const ContactClientPage = () => {
                                         <Grid item xs={12} sm={6}>
                                             <FormControl fullWidth>
                                                 <InputLabel>Name</InputLabel>
-                                                <OutlinedInput type='text' label='Name' placeholder='Enter Your Name' />
+                                                <OutlinedInput
+                                                    type='text'
+                                                    label='Name'
+                                                    placeholder='Enter Your Name'
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                />
                                             </FormControl>
                                         </Grid>
 
@@ -117,6 +128,8 @@ const ContactClientPage = () => {
                                                     type='text'
                                                     label='Email Address'
                                                     placeholder='Enter Your Email Address'
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -129,6 +142,8 @@ const ContactClientPage = () => {
                                                     fullWidth
                                                     rows={4}
                                                     defaultValue=''
+                                                    value={supportText}
+                                                    onChange={(e) => setSupportText(e.target.value)}
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -137,7 +152,20 @@ const ContactClientPage = () => {
                                                 <Grid item sm zeroMinWidth></Grid>
                                                 <Grid item>
                                                     <AnimateButton>
-                                                        <Button variant='contained' color='secondary'>
+                                                        <Button
+                                                            variant='contained'
+                                                            color='secondary'
+                                                            onClick={async () => {
+                                                                const service = new EmailSupportServiceImpl();
+                                                                const res = await service.execute({
+                                                                    email: email,
+                                                                    supportText: supportText
+                                                                });
+                                                                setEmail('');
+                                                                setSupportText('');
+                                                                setName('');
+                                                            }}
+                                                        >
                                                             Get Started
                                                         </Button>
                                                     </AnimateButton>

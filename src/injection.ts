@@ -17,6 +17,8 @@ import { GetAllProductSizeServiceImpl } from '@ecommerce-frontend/src/domain/ser
 import { GetProductByIdServiceImpl } from '@ecommerce-frontend/src/domain/services/product/getById';
 import { GetCartByAccountIdServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/getCartByAccountId';
 import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
+import { GetAllOrderServiceImpl } from '@ecommerce-frontend/src/domain/services/order/getAll';
+import { GetAllCouponServiceImpl } from '@ecommerce-frontend/src/domain/services/coupon/getAll';
 
 // ==============================||  INJECTTION INIT ||============================== //
 const InjectionInit = () => {
@@ -34,6 +36,8 @@ const InjectionInit = () => {
     Container.set(GetAllCategoryServiceImpl, new GetAllCategoryServiceImpl());
     Container.set(GetAllProductServiceImpl, new GetAllProductServiceImpl());
     Container.set(GetAllProductSizeServiceImpl, new GetAllProductSizeServiceImpl());
+    Container.set(GetAllOrderServiceImpl, new GetAllOrderServiceImpl());
+    Container.set(GetAllCouponServiceImpl, new GetAllCouponServiceImpl());
 
     Container.set(GetProductByIdServiceImpl, new GetProductByIdServiceImpl());
     Container.set(GetCartByAccountIdServiceImpl, new GetCartByAccountIdServiceImpl());

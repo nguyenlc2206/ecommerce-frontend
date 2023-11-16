@@ -21,13 +21,13 @@ const AdminProductDetail = Loadable(
     lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/products/ProductDetail'))
 );
 
-const AdminOrders = Loadable(
-    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/orders/Orders'))
+const AdminOrders = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/orders')));
+const AdminOrderDetail = Loadable(
+    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/orders/OrderDetail'))
 );
 
-const AdminCoupons = Loadable(
-    lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/coupons/Coupons'))
-);
+const AdminCoupons = Loadable(lazy(() => import('@ecommerce-frontend/src/application/journey/admin/pages/coupons')));
+
 // ==============================|| ADMIN DASHBOARD ROUTING ||============================== //
 
 const AdminRoutes = {
@@ -44,6 +44,7 @@ const AdminRoutes = {
         { path: 'products', element: <AdminProducts /> },
         { path: 'products/:id', element: <AdminProductDetail /> },
         { path: 'orders', element: <AdminOrders /> },
+        { path: 'orders/:id', element: <AdminOrderDetail /> },
         { path: 'coupons', element: <AdminCoupons /> }
     ]
 };

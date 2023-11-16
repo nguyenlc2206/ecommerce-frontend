@@ -32,7 +32,6 @@ import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store
 import { UpdateCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/updateCart';
 import { DeleteCartServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/deleteCart';
 import { GetCartByAccountIdServiceImpl } from '@ecommerce-frontend/src/domain/services/cart/getCartByAccountId';
-import { setOrderComplete } from '@ecommerce-frontend/src/infras/data/store/reducers/cart';
 
 // custom style
 const HeaderWrapper = styled('div')(({ theme }) => ({
@@ -157,7 +156,6 @@ const CheckoutClientPage = () => {
         const res = await serivceCheckout.execute();
     };
     React.useEffect(() => {
-        // dispatch(setOrderComplete({ id: '', status: false }));
         handleGetCart();
     }, []);
 
@@ -196,9 +194,9 @@ const CheckoutClientPage = () => {
         setValue(steps[status[step]]);
         const servive = new UpdateCartServiceImpl();
         if (step !== 'payment') {
-            const res = await servive.execute({ status: status[step], discounts: [] });
-        } else {
             const res = await servive.execute({ status: status[step], discounts: discounts });
+        } else {
+            const res = await servive.execute({ status: status[step], discounts: [] });
         }
     };
 
@@ -210,7 +208,7 @@ const CheckoutClientPage = () => {
         const res = await servive.execute({ status: status[step], billingAddress: billingAddress });
     };
 
-    React.useEffect(() => {}, [step, billingAddress]);
+    // React.useEffect(() => {}, [step, billingAddress]);
 
     return (
         <>

@@ -30,7 +30,7 @@ const OrderSumary = () => {
         let coupon: number = 0;
         let discount = discounts.length ? discounts[0]?.value : 0;
         products.map((item: ProductModel) => {
-            total = total + (item.price - item.price * ((item.discount + discount) / 100)) * item.qty;
+            total = total + (item.price - item.price * (item.discount / 100)) * item.qty;
             coupon = coupon + item.price * (discount / 100) * item.qty;
         });
         setTotalPrice(total);
@@ -72,7 +72,7 @@ const OrderSumary = () => {
                                     <Typography variant='subtitle1'>Total</Typography>
                                 </TableCell>
                                 <TableCell align='right' sx={{ borderBottom: 'none' }}>
-                                    <Typography variant='subtitle1'>{totalPrice}$</Typography>
+                                    <Typography variant='subtitle1'>{totalPrice - coupon}$</Typography>
                                 </TableCell>
                             </TableRow>
                         </TableBody>

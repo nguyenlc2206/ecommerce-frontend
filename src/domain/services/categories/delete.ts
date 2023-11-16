@@ -51,6 +51,7 @@ export class DeleteCategoryServiceImpl<Entity extends CategoryModel> implements 
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 

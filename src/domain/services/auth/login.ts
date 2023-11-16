@@ -53,7 +53,7 @@ export class LoginServiceImpl<Entity extends AccountModel> implements LoginServi
 
         /** dispatch dashboard */
         dispatch(activeItem(['dashboard']));
-
+        window.localStorage.clear();
         return success(result);
     }
 }

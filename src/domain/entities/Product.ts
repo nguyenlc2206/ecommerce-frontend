@@ -32,6 +32,7 @@ export class ProductModel {
     status?: string;
     discounts?: KeyedObject;
     billingAddress?: KeyedObject;
+    product?: KeyedObject;
 
     fromProductModel?(res: AxiosResponseCustom) {
         const result = { ...res?.DT?.data };

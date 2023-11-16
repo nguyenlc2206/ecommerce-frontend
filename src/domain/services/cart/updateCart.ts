@@ -50,6 +50,7 @@ export class UpdateCartServiceImpl<Entity extends ProductModel> implements Updat
                     close: false
                 })
             );
+            dispatch(setLoading(false));
             return failure(new AppError(res?.EM, res?.EC));
         }
 
@@ -73,7 +74,7 @@ export class UpdateCartServiceImpl<Entity extends ProductModel> implements Updat
         dispatch(setDiscount(result?.discounts));
         dispatch(setStep(result?.status));
         dispatch(setBillingAddress(result?.billingAddress));
-
+        dispatch(setLoading(false));
         return success(result);
     }
 }

@@ -10,6 +10,9 @@ import Slider from 'react-slick';
 // import projects
 import ProductCardItem from '@ecommerce-frontend/src/application/journey/layouts/client/Content/components/CardProductItem';
 import TimerCountDown from '@ecommerce-frontend/src/application/widgets/timer';
+import { SortProductServiceImpl } from '@ecommerce-frontend/src/domain/services/product/sort';
+import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
+import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 
 // ==============================|| PRODUCTS CARD SECTION ||============================== //
 
@@ -31,7 +34,10 @@ const ProductCardSection = () => {
         focusOnSelect: true,
         centerPadding: '0px',
         slidesToShow: itemsToShow,
-        arrows: false
+        arrows: false,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        pauseOnHover: true
     };
 
     /** useEffect */
@@ -53,9 +59,16 @@ const ProductCardSection = () => {
             return;
         }
         if (matchUpXL) {
-            setItemsToShow(5);
+            setItemsToShow(6);
         }
     }, [matchDownSM, matchDownMD, matchDownLG, matchDownXL, matchUpXL, itemsToShow]);
+
+    // get product sort discount
+    const { productSort } = useSelector((state) => state.product);
+    React.useEffect(() => {
+        const service = new SortProductServiceImpl();
+        const res = service.execute();
+    }, []);
 
     return (
         <>
@@ -88,84 +101,26 @@ const ProductCardSection = () => {
                     }}
                 >
                     <Slider {...settings}>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934565/ImagesCommon/prod-3_nbkq5p.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934560/ImagesCommon/prod-6_bqg0e1.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934560/ImagesCommon/prod-6_bqg0e1.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934560/ImagesCommon/prod-6_bqg0e1.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934560/ImagesCommon/prod-6_bqg0e1.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
-                        <Box sx={{ p: 1.5 }}>
-                            <ProductCardItem
-                                key={1}
-                                id={1}
-                                image={
-                                    'https://res.cloudinary.com/dybi8swhy/image/upload/v1698934560/ImagesCommon/prod-6_bqg0e1.jpg'
-                                }
-                                name={'Name Product'}
-                                offerPrice={1}
-                                salePrice={1}
-                                soldOut={1}
-                            />
-                        </Box>
+                        {Object.values(productSort).length &&
+                            Object.values(productSort).map((item: ProductModel, index: number) => {
+                                return (
+                                    <Box key={index} sx={{ p: 1.5 }}>
+                                        <ProductCardItem
+                                            item={item}
+                                            image={
+                                                item?.product?.images[
+                                                    Math.floor(Math.random() * item?.product?.images.length)
+                                                ]
+                                            }
+                                            name={item?.product?.name}
+                                            offerPrice={(item?.price * (1 - item?.discount / 100)).toFixed(2)}
+                                            salePrice={item?.price}
+                                            soldOut={item?.totalSold}
+                                            totalProduct={item?.totalQty + item?.totalSold}
+                                        />
+                                    </Box>
+                                );
+                            })}
                     </Slider>
                 </Box>
             </Container>

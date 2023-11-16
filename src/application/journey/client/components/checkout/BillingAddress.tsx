@@ -37,13 +37,12 @@ const validationSchema = yup.object({
 
 const BillingAddress = ({ onBack, billingAddressHandler }: BillingAddressProps) => {
     // init redux
+    const { pageLoading } = useSelector((state) => state.page);
     const { billingAddress, step } = useSelector((state) => state.cart.checkout);
     React.useEffect(() => {}, [billingAddress, step]);
 
     const { account } = useSelector((state) => state.account);
-    const [status, setStatus] = React.useState<boolean>(
-        (billingAddress && billingAddress?.name && billingAddress?.address) || step !== 'billing'
-    );
+    const [status, setStatus] = React.useState<boolean>(false);
 
     // init formik
     const formik = useFormik({
@@ -135,7 +134,7 @@ const BillingAddress = ({ onBack, billingAddressHandler }: BillingAddressProps) 
                                         </Button>
                                     </Grid>
                                     <Grid item>
-                                        {!status ? (
+                                        {status ? (
                                             <Button variant='contained' onClick={billingAddressHandler}>
                                                 Place Order
                                             </Button>
