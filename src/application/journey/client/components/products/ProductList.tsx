@@ -3,9 +3,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 
 // import projects
-import { gridSpacing } from '@ecommerce-frontend/src/infras/data/store/constant';
 import ProductCard from '@ecommerce-frontend/src/application/journey/client/components/products/ProductCard';
-import { GetAllProductServiceImpl } from '@ecommerce-frontend/src/domain/services/product/getAll';
 import { useSelector } from '@ecommerce-frontend/src/infras/data/store';
 import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 import ProductEmpty from '@ecommerce-frontend/src/application/journey/client/components/products/ProductEmpty';
@@ -16,12 +14,12 @@ const ProductsClientList = () => {
     /** init variable */
     const { products } = useSelector((state) => state.product);
     const [rows, setRows] = React.useState<ProductModel[]>(
-        Object.values(products).filter((item) => item?.isDeleted !== true)
+        Object.values(products).filter((item) => item?.isDeleted !== true && item?.products.length)
     );
 
     /** useEffect */
     React.useEffect(() => {
-        setRows(Object.values(products).filter((item) => item?.isDeleted !== true));
+        Object.values(products).filter((item) => item?.isDeleted !== true);
     }, [products]);
 
     return (

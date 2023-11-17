@@ -36,10 +36,8 @@ import useConfig from '@ecommerce-frontend/src/common/hooks/useConfig';
 import ProductFilter from '@ecommerce-frontend/src/application/journey/client/components/products/ProductFilter';
 import { ProductsFilter } from '@ecommerce-frontend/src/common/types/e-commerce';
 import ProductsClientList from '@ecommerce-frontend/src/application/journey/client/components/products/ProductList';
-import { GetAllCategoryServiceImpl } from '@ecommerce-frontend/src/domain/services/categories/getAll';
 import SkeletonProductPlaceholder from '@ecommerce-frontend/src/application/journey/client/components/products/ProductPlaceholder';
 import { FilterProductsServiceImpl } from '@ecommerce-frontend/src/domain/services/product/filter';
-import FloatingCart from '@ecommerce-frontend/src/application/journey/client/components/products/FloatingCart';
 
 // import redux
 import { dispatch, useSelector } from '@ecommerce-frontend/src/infras/data/store';
