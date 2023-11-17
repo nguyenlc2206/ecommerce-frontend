@@ -19,7 +19,7 @@ import { ProductModel } from '@ecommerce-frontend/src/domain/entities/Product';
 const ProductCardSection = () => {
     /** init hooks */
     const theme = useTheme();
-    const [itemsToShow, setItemsToShow] = React.useState(2);
+    const [itemsToShow, setItemsToShow] = React.useState(5);
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
     const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
@@ -55,7 +55,7 @@ const ProductCardSection = () => {
             return;
         }
         if (matchDownXL) {
-            setItemsToShow(4);
+            setItemsToShow(5);
             return;
         }
         if (matchUpXL) {
