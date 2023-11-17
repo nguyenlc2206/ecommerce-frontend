@@ -48,10 +48,6 @@ const OrdersList = () => {
     // init
     const navigate = useNavigate();
     const theme = useTheme();
-    const { pathname } = useLocation();
-    React.useEffect(() => {
-        if (pathname.includes('admin')) dispatch(setDisplayType('orderAdmin'));
-    }, []);
 
     // handle rows
     const { pageLoading } = useSelector((state) => state.page);
@@ -62,9 +58,10 @@ const OrdersList = () => {
     }, [pageLoading]);
 
     // get list orders
+    const { pathname } = useLocation();
     React.useEffect(() => {
         // init service
-        if (displayType === 'orderAdmin') {
+        if (pathname.includes('admin')) {
             const service = new GetAllOrderServiceImpl();
             const res = service.execute();
         } else {
