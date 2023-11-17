@@ -98,7 +98,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             passwordConfirm: passwordConfirm,
             fullName: fullName ? fullName : email,
             phoneNo: phoneNo,
-            avatar: avatar
+            avatar: avatar ? avatar : undefined
         } as AccountModel);
         // * error
         if (res.isFailure()) return failure(res.error);

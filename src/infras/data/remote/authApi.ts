@@ -21,7 +21,22 @@ export class AuthApi<T extends AccountModel> implements AuthRepository<T> {
 
     /** overiding register method */
     async register(entity: T): Promise<AxiosResponseCustom> {
-        const response = await axios.post('/api/v1/register', { ...entity });
+        const formData = new FormData();
+        if (!entity?.avatar) {
+            formData.append('fullName', entity?.fullName);
+            formData.append('email', entity?.email);
+            formData.append('phoneNo', entity?.phoneNo);
+            formData.append('password', entity?.password);
+            formData.append('passwordConfirm', entity?.passwordConfirm);
+        } else {
+            formData.append('fullName', entity?.fullName);
+            formData.append('email', entity?.email);
+            formData.append('phoneNo', entity?.phoneNo);
+            formData.append('password', entity?.password);
+            formData.append('passwordConfirm', entity?.passwordConfirm);
+            formData.append('image', entity?.avatar, entity?.avatar?.name);
+        }
+        const response = await axios.post('/api/v1/register', formData);
         return response;
     }
 
