@@ -51,15 +51,15 @@ const ProductCardSection = () => {
             return;
         }
         if (matchDownLG) {
-            setItemsToShow(4);
+            setItemsToShow(3);
             return;
         }
         if (matchDownXL) {
-            setItemsToShow(5);
+            setItemsToShow(4);
             return;
         }
         if (matchUpXL) {
-            setItemsToShow(6);
+            setItemsToShow(5);
         }
     }, [matchDownSM, matchDownMD, matchDownLG, matchDownXL, matchUpXL, itemsToShow]);
 
