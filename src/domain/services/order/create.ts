@@ -67,8 +67,8 @@ export class CreateOrderServiceImpl<Entity extends OrderModel> implements Create
         );
         dispatch(setLoading(false));
         dispatch(activeOrder(result));
-        dispatch(setURLCardPayemnt(result?.url));
         dispatch(setOrderComplete({ id: result?.id, orderNumber: result?.orderNumber, status: true }));
+        dispatch(setURLCardPayemnt(result?.url));
         return success(result);
     }
 }

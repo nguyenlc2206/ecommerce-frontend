@@ -43,7 +43,7 @@ const ClientRoutes = {
         { path: 'profile/:id', element: <ProfilePage /> },
         { path: 'checkout', element: <CheckoutPage /> },
         { path: 'orders', element: <OrdersPage /> },
-        { path: 'orders/:id', element: <OrderDetailPage /> }
+        { path: 'orders/:orderId', element: <OrderDetailPage /> }
     ]
 };
 

@@ -110,7 +110,7 @@ const OrderComplete = ({ open }: { open: boolean }) => {
                                             startIcon={<KeyboardBackspaceIcon />}
                                             onClick={() => {
                                                 naviage('/products');
-                                                dispatch(setOrderComplete({ status: false, id: '', orderNumber: '' }));
+                                                dispatch(setOrderComplete({ id: '', status: false, orderNumer: '' }));
                                             }}
                                         >
                                             Continue Shopping
@@ -122,7 +122,7 @@ const OrderComplete = ({ open }: { open: boolean }) => {
                                             fullWidth
                                             onClick={() => {
                                                 naviage(`/orders/${orderComplete?.id}`);
-                                                dispatch(setOrderComplete({ status: false }));
+                                                dispatch(setOrderComplete({ id: '', status: false, orderNumer: '' }));
                                             }}
                                         >
                                             Download Invoice

@@ -143,7 +143,6 @@ const CheckoutClientPage = () => {
 
     // init redux
     const { products, step, discounts, billingAddress } = useSelector((state) => state.cart.checkout);
-    const { urlCardPayment } = useSelector((state) => state.order);
 
     const [value, setValue] = React.useState(steps[step] || 0);
     const handleChange = (newValue: number) => {
@@ -185,6 +184,7 @@ const CheckoutClientPage = () => {
         } else {
             setValue(steps[status[step]]);
             const res = await servive.execute({ status: status[step], discounts: discounts });
+            if (res.isFailure()) return;
         }
     };
 

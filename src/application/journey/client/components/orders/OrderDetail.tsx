@@ -65,11 +65,11 @@ const OrderClientDetail = () => {
     const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
     const { orderSelect } = useSelector((state) => state.order);
     // init params id
-    const { id } = useParams();
+    const { orderId } = useParams();
     React.useEffect(() => {
         // init service
         const service = new GetOrderByIdServiceImpl();
-        const res = service.execute(id);
+        const res = service.execute(orderId);
     }, []);
 
     // set selected tab

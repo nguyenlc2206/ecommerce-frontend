@@ -204,7 +204,7 @@ const OrderInformationDetail = ({ order }: OrderDetailProps) => {
                                             order?.orderItems.length &&
                                             order?.orderItems.map((item: ProductModel, index: number) => {
                                                 return (
-                                                    <TableRow key={order?.id}>
+                                                    <TableRow key={index}>
                                                         <TableCell>
                                                             <Grid container spacing={2}>
                                                                 <Grid item>

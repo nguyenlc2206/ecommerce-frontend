@@ -25,7 +25,13 @@ const order = createSlice({
         },
         // set card url payment
         setURLCardPayemnt(state, action) {
-            if (action.payload) window.open(action.payload, '_blank', 'noreferrer');
+            console.log('>>>Check setURLCardPayemnt:', action.payload);
+            if (action.payload) {
+                let a = document.createElement('a');
+                a.href = action.payload;
+                a.setAttribute('target', '_blank');
+                a.click();
+            }
             state.urlCardPayment = action.payload;
         },
         setDisplayType(state, action) {

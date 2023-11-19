@@ -35,6 +35,11 @@ const cart = createSlice({
             state.checkout.discounts = [];
             state.checkout.billingAddress = null;
             state.checkout.totalQuantity = action.payload ? action.payload.length : 0;
+            state.checkout.orderComplete = {
+                id: state.checkout.orderComplete.id,
+                status: state.checkout.orderComplete.status,
+                orderNumber: state.checkout.orderComplete.orderNumber
+            };
         },
         // set step
         setStep(state, action) {
@@ -63,9 +68,9 @@ const cart = createSlice({
         // set order complete
         setOrderComplete(state, action) {
             state.checkout.orderComplete = {
-                ...state.checkout.orderComplete,
                 id: action.payload.id,
-                status: action.payload.status
+                status: action.payload.status,
+                orderNumber: action.payload.orderNumber
             };
         }
     }

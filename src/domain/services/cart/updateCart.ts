@@ -69,6 +69,7 @@ export class UpdateCartServiceImpl<Entity extends ProductModel> implements Updat
         // get data response
         const _init = new ProductModel();
         const result = _init.fromProductModel(res);
+
         // check product cart with account Id
         dispatch(addProduct(result?.products));
         dispatch(setDiscount(result?.discounts));

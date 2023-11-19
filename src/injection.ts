@@ -42,6 +42,7 @@ const InjectionInit = () => {
     Container.set(GetProductByIdServiceImpl, new GetProductByIdServiceImpl());
     Container.set(GetCartByAccountIdServiceImpl, new GetCartByAccountIdServiceImpl());
     Container.set(UpdateCartServiceImpl, new UpdateCartServiceImpl());
+    Container.set(GetCartByAccountIdServiceImpl, new GetCartByAccountIdServiceImpl());
 };
 
 export default InjectionInit;
