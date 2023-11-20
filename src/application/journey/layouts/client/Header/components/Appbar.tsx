@@ -100,7 +100,7 @@ const AppBar = ({ ...others }) => {
                                 Contact
                             </Button>
                             {isAdmin && (
-                                <Button color='inherit' component={RouterLink} to='/admin' target='_blank'>
+                                <Button color='inherit' component={RouterLink} to='/admin/users' target='_blank'>
                                     Dashboard
                                 </Button>
                             )}
@@ -139,7 +139,11 @@ const AppBar = ({ ...others }) => {
                                                 </ListItemButton>
                                             </Link>
                                             {isAdmin && (
-                                                <Link style={{ textDecoration: 'none' }} href='/admin' target='_blank'>
+                                                <Link
+                                                    style={{ textDecoration: 'none' }}
+                                                    href='/admin/users'
+                                                    target='_blank'
+                                                >
                                                     <ListItemButton component='a'>
                                                         <ListItemIcon>
                                                             <IconBook />
