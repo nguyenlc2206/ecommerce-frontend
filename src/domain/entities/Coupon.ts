@@ -7,7 +7,7 @@ export class CouponModel {
     code?: string;
     startDate?: any;
     endDate?: any;
-    discount?: number;
+    discount?: any;
     type?: string;
     accountId?: string;
     isDeleted?: boolean;
@@ -20,6 +20,6 @@ export class CouponModel {
 
     fromCouponModel(res: AxiosResponseCustom) {
         const result = { ...res?.DT?.data };
-        return result;
+        return result as CouponModel;
     }
 }

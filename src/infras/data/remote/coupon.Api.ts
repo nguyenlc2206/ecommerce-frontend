@@ -36,4 +36,10 @@ export class CouponApi<T extends CouponModel> implements CouponRepository<T> {
         const response = await axios.get(`/api/v1/coupon/active/${id}`);
         return response;
     }
+
+    /** overiding create coupon */
+    async create(entity: T): Promise<AxiosResponseCustom> {
+        const response = await axios.post('/api/v1/coupon', { ...entity });
+        return response;
+    }
 }

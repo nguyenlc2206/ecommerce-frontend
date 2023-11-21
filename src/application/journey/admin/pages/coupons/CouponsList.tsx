@@ -16,6 +16,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow,
     TextField,
     Tooltip,
@@ -40,6 +41,7 @@ import Chip from '@ecommerce-frontend/src/application/widgets/Chip';
 import { DeleteCouponServiceImpl } from '@ecommerce-frontend/src/domain/services/coupon/delete';
 import { setLoading } from '@ecommerce-frontend/src/infras/data/store/reducers/page';
 import { ActiveCouponServiceImpl } from '@ecommerce-frontend/src/domain/services/coupon/active';
+import CouponAddDialog from '@ecommerce-frontend/src/application/journey/admin/components/coupons/FormAddCouponDialog';
 
 // ==============================|| COUPONS LIST ||============================== //
 
@@ -57,6 +59,7 @@ const CouponsList = () => {
     const { coupons } = useSelector((state) => state.coupon);
     const [rows, setRows] = React.useState<CouponModel[]>(Object.values(coupons));
     React.useEffect(() => {
+        setOpen(false);
         setRows(Object.values(coupons));
     }, [pageLoading]);
 
@@ -103,6 +106,20 @@ const CouponsList = () => {
         }
     };
 
+    // show a right sidebar when clicked on new product
+    const [open, setOpen] = React.useState(false);
+    const [code, setCode] = React.useState<string>('');
+    const handleClickOpenDialog = () => {
+        //Generate random numbers for order
+        const randomTxt = Math.random().toString(36).substring(7).toLocaleUpperCase();
+        const randomNumbers = Math.floor(1000 + Math.random() * 90000);
+        setCode(randomTxt + randomNumbers);
+        setOpen(true);
+    };
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
     return (
         <>
             <MainCard content={false}>
@@ -128,12 +145,13 @@ const CouponsList = () => {
                                 <Fab
                                     color='primary'
                                     size='small'
-                                    onClick={() => {}}
+                                    onClick={handleClickOpenDialog}
                                     sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
                                 >
                                     <AddIcon fontSize='small' />
                                 </Fab>
                             </Tooltip>
+                            <CouponAddDialog open={open} handleCloseDialog={handleCloseDialog} codeNumber={code} />
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -285,6 +303,15 @@ const CouponsList = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component='div'
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </MainCard>
         </>
     );

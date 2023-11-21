@@ -6,4 +6,5 @@ export interface CouponRepository<T> {
     getAll(): Promise<AxiosResponseCustom>;
     delete(id: string): Promise<AxiosResponseCustom>;
     active(id: string): Promise<AxiosResponseCustom>;
+    create(entity: T): Promise<AxiosResponseCustom>;
 }
